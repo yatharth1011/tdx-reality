@@ -102,7 +102,7 @@ firebase deploy
 
 ## 📱 Android Build (Google Play)
 
-The repository contains a `TDX - Google Play package` folder and a `.zip` file. This contains the wrapped web application and specific assets configured for submission to the Google Play Store (likely via a Trusted Web Activity (TWA) or Apache Cordova). Refer to the files within that specific folder to update version codes and keystores before a Play Console upload.
+The repository contains a `TDX - Google Play package` folder and a `.zip` file. This contains the wrapped web application and specific assets configured for submission to the Google Play Store. It also contains the final APK to be installed on android devices.
 
 ---
 
@@ -110,5 +110,3 @@ The repository contains a `TDX - Google Play package` folder and a `.zip` file. 
 
 * Currently maintained by [yatharth1011](https://github.com/yatharth1011).
 * Feel free to fork the repository and submit Pull Requests for bug fixes or feature additions. If you encounter any issues, please open an issue in the tracker.
-
-```
