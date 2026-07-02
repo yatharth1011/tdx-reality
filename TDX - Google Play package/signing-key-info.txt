@@ -1,0 +1,10 @@
+Keep this file and signing.keystore in a safe place. You'll need these files if you want to upload future versions of your PWA to the Google Play Store.
+
+Key store file: signing.keystore
+Key store password: t6gdMFi36_BZ
+Key alias: my-key-alias
+Key password: t6gdMFi36_BZ
+Signer's full name: TDX Admin
+Signer's organization: TDX Reality Engine
+Signer's organizational unit: Engineering
+Signer's country code: US

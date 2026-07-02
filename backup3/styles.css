@@ -1,0 +1,2367 @@
+:root {
+    --bg: #0b0b0d;
+    --surface: #111114;
+    --surface-light: #18181d;
+    --surface-hover: #202027;
+    --text: #e6e6f0;
+    --text-muted: #8888a8;
+    --text-subtle: #44445a;
+    --accent: #f5a623;
+    --accent-dim: rgba(245, 166, 35, 0.11);
+    --accent-glow: rgba(245, 166, 35, 0.22);
+    --success: #34d399;
+    --success-bright: #6ee7b7;
+    --warning: #fb923c;
+    --danger: #f87171;
+    --border: rgba(255, 255, 255, 0.07);
+    --border-hi: rgba(255, 255, 255, 0.13);
+    --border-accent: rgba(245, 166, 35, 0.28);
+    --sh1: 0 1px 3px rgba(0, 0, 0, 0.5);
+    --sh2: 0 4px 16px rgba(0, 0, 0, 0.55);
+    --sh3: 0 14px 48px rgba(0, 0, 0, 0.75);
+    --ease: cubic-bezier(0.4, 0, 0.2, 1);
+    --dur: 0.17s;
+    --r: 18px;
+    --r-sm: 12px;
+    --r-pill: 100px;
+}
+
+body.amoled {
+    --bg: #000000;
+    --surface: #000000;
+    --surface-light: #000000;
+    --surface-hover: #000000;
+    --border: #000000;
+    --border-hi: #000000;
+    --sh1: 0 1px 4px #000000;
+    --sh2: 0 4px 18px #000000;
+    --sh3: 0 16px 52px #000000;
+}
+
+/* ── Motion tokens ── */
+:root {
+    --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+    /* overshoot */
+    --spring-soft: cubic-bezier(0.22, 1.2, 0.36, 1);
+    /* gentle overshoot */
+    --decel: cubic-bezier(0.0, 0.0, 0.2, 1);
+    /* enter */
+    --accel: cubic-bezier(0.4, 0.0, 1.0, 1);
+    /* exit */
+    --standard: cubic-bezier(0.4, 0.0, 0.2, 1);
+    --dur-xs: 80ms;
+    --dur-sm: 150ms;
+    --dur-md: 250ms;
+    --dur-lg: 380ms;
+}
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px) scale(0.98)
+    }
+
+    to {
+        opacity: 1;
+        transform: none
+    }
+}
+
+@keyframes slideRight {
+    from {
+        opacity: 0;
+        transform: translateX(-14px)
+    }
+
+    to {
+        opacity: 1;
+        transform: none
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-22px)
+    }
+
+    to {
+        opacity: 1;
+        transform: none
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(22px)
+    }
+
+    to {
+        opacity: 1;
+        transform: none
+    }
+}
+
+@keyframes popIn {
+    from {
+        opacity: 0;
+        transform: scale(0.82)
+    }
+
+    to {
+        opacity: 1;
+        transform: none
+    }
+}
+
+@keyframes springUp {
+    0% {
+        opacity: 0;
+        transform: translateY(18px) scale(0.95)
+    }
+
+    60% {
+        transform: translateY(-3px) scale(1.01)
+    }
+
+    100% {
+        opacity: 1;
+        transform: none
+    }
+}
+
+@keyframes cardIn {
+    from {
+        opacity: 0;
+        transform: translateY(12px) scale(0.97)
+    }
+
+    to {
+        opacity: 1;
+        transform: none
+    }
+}
+
+@keyframes barFill {
+    from {
+        width: 0 !important
+    }
+}
+
+@keyframes barSpring {
+    0% {
+        width: 0 !important
+    }
+
+    70% {
+        width: calc(var(--w) * 1.04) !important
+    }
+
+    100% {
+        width: var(--w) !important
+    }
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: .4;
+        transform: scale(.95)
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.05)
+    }
+}
+
+@keyframes ripple {
+    from {
+        transform: scale(0);
+        opacity: 0.35
+    }
+
+    to {
+        transform: scale(4);
+        opacity: 0
+    }
+}
+
+@keyframes navPop {
+    0% {
+        transform: scale(1)
+    }
+
+    40% {
+        transform: scale(0.88)
+    }
+
+    70% {
+        transform: scale(1.06)
+    }
+
+    100% {
+        transform: scale(1)
+    }
+}
+
+@keyframes glowPulse {
+
+    0%,
+    100% {
+        box-shadow: 0 0 6px var(--sc, var(--accent))
+    }
+
+    50% {
+        box-shadow: 0 0 18px var(--sc, var(--accent))
+    }
+}
+
+@keyframes shimmer {
+    from {
+        background-position: 200% 0
+    }
+
+    to {
+        background-position: -200% 0
+    }
+}
+
+@keyframes heroCount {
+    from {
+        opacity: 0;
+        transform: scale(0.6) translateY(8px)
+    }
+
+    to {
+        opacity: 1;
+        transform: none
+    }
+}
+
+@keyframes staggerIn {
+    from {
+        opacity: 0;
+        transform: translateX(-8px)
+    }
+
+    to {
+        opacity: 1;
+        transform: none
+    }
+}
+
+@keyframes triumphIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.72) translateY(24px)
+    }
+
+    65% {
+        transform: scale(1.03) translateY(-4px)
+    }
+
+    100% {
+        opacity: 1;
+        transform: none
+    }
+}
+
+@keyframes triumphNum {
+    0% {
+        opacity: 0;
+        transform: scale(0.4) translateY(16px)
+    }
+
+    60% {
+        transform: scale(1.08)
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1)
+    }
+}
+
+@keyframes triumphSlideLeft {
+    from {
+        opacity: 0;
+        transform: translateX(60px) scale(0.95)
+    }
+
+    to {
+        opacity: 1;
+        transform: none
+    }
+}
+
+@keyframes triumphGlow {
+
+    0%,
+    100% {
+        opacity: 0.7
+    }
+
+    50% {
+        opacity: 1
+    }
+}
+
+@keyframes triumphRays {
+    from {
+        transform: rotate(0deg)
+    }
+
+    to {
+        transform: rotate(360deg)
+    }
+}
+
+/* ── Triumph Carousel Overlay ── */
+#triumph-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding: 20px;
+}
+
+#triumph-overlay.open {
+    display: flex;
+}
+
+.triumph-bg {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 52%, color-mix(in srgb, var(--gc, #f5a623) 28%, transparent) 0%, rgba(12, 10, 0, 0.97) 68%);
+    transition: background 0.4s ease;
+}
+
+.triumph-rays {
+    position: absolute;
+    inset: -60%;
+    background: repeating-conic-gradient(color-mix(in srgb, var(--gc, #f5a623) 13%, transparent) 0deg 9deg, color-mix(in srgb, var(--gc, #f5a623) 3%, transparent) 9deg 18deg);
+    animation: triumphRays 28s linear infinite;
+    transition: background 0.4s ease;
+}
+
+.triumph-glow-ring {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 50%, color-mix(in srgb, var(--gc, #f5a623) 22%, transparent) 0%, color-mix(in srgb, var(--gc, #f5a623) 10%, transparent) 28%, transparent 60%);
+    animation: triumphGlow 2.4s ease-in-out infinite;
+    transition: background 0.4s ease;
+}
+
+.triumph-card {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 360px;
+    background: linear-gradient(155deg, #1a1506 0%, #0e0e12 55%, #12100a 100%);
+    border: 1.5px solid color-mix(in srgb, var(--gc, #f5a623) 38%, transparent);
+    border-radius: 28px;
+    padding: 36px 28px 28px;
+    box-shadow: 0 0 60px color-mix(in srgb, var(--gc, #f5a623) 18%, transparent), 0 24px 64px rgba(0, 0, 0, 0.85);
+    text-align: center;
+    animation: triumphIn 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    transition: border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+.triumph-slide {
+    display: none;
+}
+
+.triumph-slide.active {
+    display: block;
+    animation: triumphSlideLeft 0.32s cubic-bezier(0.22, 1.2, 0.36, 1) both;
+}
+
+.triumph-icon {
+    font-size: 2.6rem;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.triumph-label {
+    font-family: 'Bricolage Grotesque', sans-serif, 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji';
+    font-size: 0.62rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(245, 166, 35, 0.6);
+    font-weight: 700;
+    margin-bottom: 14px;
+}
+
+.triumph-number {
+    font-family: 'JetBrains Mono', monospace, 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji';
+    font-size: 3.8rem;
+    font-weight: 700;
+    line-height: 1;
+    background: linear-gradient(135deg, #ffe27a 0%, #f5a623 50%, #e07b00 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: triumphNum 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.triumph-desc {
+    font-size: 0.82rem;
+    color: rgba(230, 230, 240, 0.65);
+    font-weight: 500;
+    line-height: 1.5;
+    margin-bottom: 6px;
+}
+
+.triumph-sub {
+    font-size: 0.7rem;
+    color: rgba(245, 166, 35, 0.5);
+    font-family: 'JetBrains Mono', monospace, 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji';
+    margin-top: 4px;
+}
+
+.triumph-dots {
+    display: flex;
+    justify-content: center;
+    gap: 7px;
+    margin: 22px 0 20px;
+}
+
+.triumph-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: rgba(245, 166, 35, 0.2);
+    transition: background 0.25s, transform 0.25s;
+}
+
+.triumph-dot.active {
+    background: var(--accent);
+    transform: scale(1.35);
+}
+
+.triumph-btn {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    padding: 13px;
+    background: linear-gradient(90deg, #f5a623, #e07b00);
+    color: #000;
+    border: none;
+    border-radius: 100px;
+    font-family: 'Bricolage Grotesque', sans-serif, 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji';
+    font-size: 0.9rem;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    box-shadow: 0 4px 24px rgba(245, 166, 35, 0.38);
+    transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.18s;
+}
+
+.triumph-btn:hover {
+    transform: scale(1.04);
+    box-shadow: 0 6px 32px rgba(245, 166, 35, 0.55);
+}
+
+.triumph-btn:active {
+    transform: scale(0.96);
+}
+
+/* ── Rank & Badge styles ── */
+.rank-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    border-radius: 100px;
+    border: 1px solid rgba(245, 166, 35, 0.35);
+    background: linear-gradient(90deg, rgba(245, 166, 35, 0.12), rgba(245, 166, 35, 0.05));
+    font-family: 'Bricolage Grotesque', sans-serif, 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji';
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--accent);
+}
+
+.badge-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.badge-card {
+    border-radius: 14px;
+    padding: 10px 8px;
+    text-align: center;
+    border: 1px solid var(--border);
+    transition: transform 0.15s var(--spring), box-shadow 0.15s;
+}
+
+.badge-card.earned {
+    background: color-mix(in srgb, var(--bc, var(--accent)) 10%, var(--surface-light));
+    border-color: color-mix(in srgb, var(--bc, var(--accent)) 40%, transparent);
+    box-shadow: 0 2px 12px color-mix(in srgb, var(--bc, var(--accent)) 18%, transparent);
+}
+
+.badge-card.locked {
+    background: var(--surface);
+    opacity: 0.38;
+    filter: grayscale(1);
+}
+
+.badge-card .b-icon {
+    font-size: 1.6rem;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.badge-card .b-name {
+    font-size: 0.62rem;
+    font-weight: 800;
+    font-family: 'Bricolage Grotesque', sans-serif, 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji';
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text);
+    line-height: 1.3;
+}
+
+.badge-card .b-desc {
+    font-size: 0.57rem;
+    color: var(--text-muted);
+    margin-top: 3px;
+    line-height: 1.35;
+}
+
+.badge-card.earned .b-name {
+    color: var(--bc, var(--accent));
+}
+
+/* Triumph badge slide */
+.triumph-badge-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: rgba(245, 166, 35, 0.08);
+    border: 1px solid rgba(245, 166, 35, 0.22);
+    border-radius: 16px;
+    padding: 14px;
+    text-align: left;
+    margin-bottom: 8px;
+}
+
+.triumph-badge-row .tb-icon {
+    font-size: 2rem;
+    flex-shrink: 0;
+}
+
+.triumph-badge-row .tb-info .tb-name {
+    font-family: 'Bricolage Grotesque', sans-serif, 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji';
+    font-size: 0.82rem;
+    font-weight: 800;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.triumph-badge-row .tb-info .tb-desc {
+    font-size: 0.7rem;
+    color: rgba(230, 230, 240, 0.6);
+    margin-top: 2px;
+}
+
+* {
+    box-sizing: border-box;
+    font-family: 'Nunito', system-ui, sans-serif, 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji';
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    padding-bottom: 130px;
+    overscroll-behavior-y: none;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.08) transparent;
+    -webkit-font-smoothing: antialiased;
+}
+
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+/* ── Header ── */
+.header {
+    background: var(--surface);
+    padding: 14px 16px 12px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: var(--sh1);
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-family: 'Bricolage Grotesque', sans-serif, 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji';
+    color: var(--accent);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.header .subtitle {
+    font-size: 0.73rem;
+    color: var(--text-muted);
+    margin-top: 3px;
+    font-weight: 500;
+}
+
+.header .controls {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+    gap: 8px;
+}
+
+/* Apply to all clickable elements */
+* {
+    -webkit-tap-highlight-color: transparent;
+}
+
+
+/* Pill button — with ripple layer */
+.btn-icon {
+    position: relative;
+    overflow: hidden;
+    background: var(--surface-light);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    padding: 8px 20px;
+    border-radius: 100px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 0.8rem;
+    font-family: 'Nunito', sans-serif, 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji';
+    transition: border-color var(--dur-sm) var(--standard), color var(--dur-sm) var(--standard), background var(--dur-sm) var(--standard), transform var(--dur-sm) var(--spring);
+}
+
+.btn-icon:hover {
+    border-color: var(--border-accent);
+    color: var(--accent);
+    background: var(--accent-dim);
+    transform: scale(1.04);
+}
+
+.btn-icon:active {
+    transform: scale(0.95);
+}
+
+/* ── Tab container ── */
+.container {
+    padding: 14px;
+    display: none;
+}
+
+.container.active {
+    display: block;
+    animation: fadeUp var(--dur-md) var(--decel) both;
+}
+
+/* ── Mobile bottom nav ── */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0 env(safe-area-inset-bottom, 10px);
+    z-index: 100;
+}
+
+.nav-item {
+    position: relative;
+    overflow: hidden;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 0.6rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    gap: 3px;
+    padding: 5px 14px;
+    border-radius: 100px;
+    transition: color var(--dur-sm) var(--standard), background var(--dur-md) var(--spring);
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    font-family: 'Bricolage Grotesque', sans-serif, 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji';
+    flex: 1;
+}
+
+.nav-item.active {
+    color: var(--accent);
+    background: var(--accent-dim);
+    animation: navPop 0.32s var(--spring);
+}
+
+.nav-item i {
+    font-size: 1.1rem;
+    font-style: normal;
+    transition: transform var(--dur-md) var(--spring);
+}
+
+.nav-item.active i {
+    transform: scale(1.18) translateY(-1px);
+}
+
+.nav-item:hover:not(.active) i {
+    transform: scale(1.1);
+}
+
+/* ── Cards ── */
+.card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    margin-bottom: 12px;
+    overflow: hidden;
+    box-shadow: var(--sh1);
+    transition: box-shadow var(--dur-md) var(--spring), border-color var(--dur-sm) var(--standard), transform var(--dur-md) var(--spring);
+}
+
+.card:hover {
+    box-shadow: var(--sh2);
+    border-color: var(--border-hi);
+    transform: translateY(-2px);
+}
+
+.card-header {
+    background: color-mix(in srgb, var(--sc, var(--accent)) 8%, transparent);
+    padding: 10px 16px 10px 22px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+}
+
+.card-header::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: var(--sc, var(--accent));
+    animation: glowPulse 3s var(--standard) infinite;
+}
+
+.card-header .ch-title {
+    font-family: 'Bricolage Grotesque', sans-serif, 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji';
+    background: linear-gradient(90deg, var(--sc, var(--accent)) 0%, color-mix(in srgb, var(--sc, var(--accent)) 55%, #fff 45%) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-size: 0.75rem;
+    letter-spacing: 0.8px;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.card-header .ch-meta {
+    color: var(--text-subtle);
+    font-size: 0.62rem;
+    font-family: 'JetBrains Mono', monospace, 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji';
+    -webkit-text-fill-color: unset;
+}
+
+/* ── Task list — stagger via --i ── */
+.task-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.task-item {
+    padding: 9px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    animation: staggerIn var(--dur-md) var(--decel) both;
+    animation-delay: calc(var(--i, 0) * 35ms);
+    transition: background var(--dur-sm) var(--standard), padding-left var(--dur-sm) var(--spring);
+}
+
+.task-item:hover {
+    background: var(--surface-hover);
+    padding-left: 22px;
+}
+
+.task-item:last-child {
+    border-bottom: none;
+}
+
+.task-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.task-title {
+    font-size: 0.87rem;
+    font-weight: 600;
+    margin-bottom: 2px;
+    line-height: 1.45;
+}
+
+.task-meta {
+    font-size: 0.71rem;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+/* LOG button — M3 filled tonal with spring + ripple */
+.task-action {
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+    margin-left: 12px;
+    font-weight: 800;
+    font-size: 0.67rem;
+    letter-spacing: 0.8px;
+    color: var(--accent);
+    padding: 6px 16px;
+    border: 1.5px solid var(--border-accent);
+    border-radius: 100px;
+    cursor: pointer;
+    white-space: nowrap;
+    background: var(--accent-dim);
+    font-family: 'Bricolage Grotesque', sans-serif, 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji';
+    text-transform: uppercase;
+    transition: background var(--dur-sm) var(--standard), color var(--dur-sm) var(--standard), border-color var(--dur-sm) var(--standard), box-shadow var(--dur-sm) var(--standard), transform var(--dur-md) var(--spring);
+}
+
+.task-action::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0);
+    transition: background var(--dur-xs) var(--standard);
+    border-radius: inherit;
+}
+
+.task-action:hover {
+    background: var(--accent);
+    color: #000;
+    border-color: var(--accent);
+    box-shadow: 0 4px 20px var(--accent-glow);
+    transform: scale(1.07);
+}
+
+.task-action:hover::before {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.task-action:active {
+    transform: scale(0.93);
+    box-shadow: none;
+}
+
+.task-item.done {
+    opacity: 0.45;
+}
+
+.task-item.done .task-title {
+    text-decoration: line-through;
+    color: var(--success-bright);
+}
+
+/* ── Progress bars — chunky M3 style ── */
+.progress-wrap {
+    margin-top: 5px;
+}
+
+.progress-bar-bg {
+    width: 100%;
+    height: 7px;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 100px;
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    border-radius: 100px;
+    transition: width 0.55s var(--spring-soft);
+    animation: barFill 0.55s var(--spring-soft);
+    position: relative;
+}
+
+.progress-bar-fill::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent 40%, rgba(255, 255, 255, 0.22) 100%);
+    border-radius: inherit;
+}
+
+/* ── Buttons ── */
+.btn {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    padding: 12px 20px;
+    background: var(--surface-light);
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: 100px;
+    font-size: 0.88rem;
+    cursor: pointer;
+    margin-bottom: 10px;
+    font-weight: 700;
+    font-family: 'Nunito', sans-serif, 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji';
+    transition: background var(--dur-sm) var(--standard), border-color var(--dur-sm) var(--standard), box-shadow var(--dur-sm) var(--standard), transform var(--dur-md) var(--spring);
+}
+
+.btn:hover {
+    border-color: var(--border-hi);
+    background: var(--surface-hover);
+    transform: scale(1.02);
+}
+
+.btn:active {
+    transform: scale(0.97);
+}
+
+.btn-primary {
+    background: var(--accent);
+    color: #000;
+    border-color: transparent;
+    font-weight: 800;
+}
+
+.btn-primary:hover {
+    background: #f8b530;
+    box-shadow: 0 4px 20px var(--accent-glow);
+}
+
+.btn-danger {
+    background: rgba(248, 113, 113, 0.1);
+    color: var(--danger);
+    border-color: rgba(248, 113, 113, 0.22);
+}
+
+.btn-danger:hover {
+    background: var(--danger);
+    color: #fff;
+    border-color: var(--danger);
+}
+
+/* Ripple helper */
+.ripple-wave {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.28);
+    width: 60px;
+    height: 60px;
+    margin-top: -30px;
+    margin-left: -30px;
+    animation: ripple 0.5s var(--decel) forwards;
+    pointer-events: none;
+}
+
+/* ── Modal — spring scale from center ── */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.78);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+    backdrop-filter: blur(8px);
+}
+
+.modal {
+    background: var(--surface-light);
+    width: 100%;
+    max-width: 400px;
+    border-radius: 28px;
+    padding: 28px;
+    border: 1px solid var(--border-hi);
+    box-shadow: var(--sh3);
+    animation: popIn var(--dur-md) var(--spring) both;
+}
+
+.modal h2 {
+    margin-top: 0;
+    font-size: 1.15rem;
+    color: var(--accent);
+    font-family: 'Bricolage Grotesque', sans-serif, 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji';
+    font-weight: 800;
+    letter-spacing: 0.3px;
+}
+
+.modal input {
+    width: 100%;
+    padding: 14px;
+    background: var(--bg);
+    border: 1.5px solid var(--border);
+    color: var(--text);
+    border-radius: 16px;
+    font-size: 1.8rem;
+    margin: 14px 0;
+    outline: none;
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace, 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji';
+    font-weight: 700;
+    transition: border-color var(--dur-sm) var(--standard), box-shadow var(--dur-sm) var(--standard), transform var(--dur-md) var(--spring);
+}
+
+.modal input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px var(--accent-dim);
+    transform: scale(1.02);
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+/* ── Stats & Editor ── */
+.stat-row {
+    display: flex;
+    align-items: center;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--border);
+    gap: 10px;
+    animation: staggerIn var(--dur-md) var(--decel) both;
+    animation-delay: calc(var(--i, 0)*40ms);
+}
+
+.editor-group {
+    margin-bottom: 8px;
+}
+
+.editor-header {
+    padding: 11px 16px;
+    background: var(--surface-light);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    font-weight: 700;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+    cursor: pointer;
+    font-family: 'Nunito', sans-serif, 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji';
+    transition: border-color var(--dur-sm) var(--standard), transform var(--dur-md) var(--spring);
+}
+
+.editor-header:hover {
+    border-color: var(--border-accent);
+    transform: scale(1.01);
+}
+
+.editor-body {
+    display: none;
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    border-top: none;
+    border-radius: 0 0 14px 14px;
+    background: var(--surface);
+}
+
+.editor-group.open .editor-body {
+    display: block;
+    animation: fadeUp var(--dur-sm) var(--decel) both;
+}
+
+.editor-input-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    gap: 10px;
+}
+
+.editor-input-row span {
+    flex: 1;
+    font-size: 0.83rem;
+}
+
+.editor-input-row input {
+    width: 62px;
+    padding: 5px;
+    background: var(--bg);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    text-align: center;
+    transition: border-color var(--dur-sm) var(--standard);
+}
+
+.editor-input-row input:focus {
+    border-color: var(--accent);
+    outline: none;
+}
+
+.badge {
+    background: var(--surface-light);
+    padding: 3px 10px;
+    border-radius: 100px;
+    font-size: 0.67rem;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    font-weight: 600;
+}
+
+select {
+    width: 100%;
+    padding: 11px 14px;
+    background: var(--surface-light);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    margin-bottom: 13px;
+    outline: none;
+    font-size: 0.9rem;
+    font-family: 'Nunito', sans-serif, 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji';
+    transition: border-color var(--dur-sm) var(--standard), box-shadow var(--dur-sm) var(--standard);
+}
+
+select:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-dim);
+}
+
+h2 {
+    font-family: 'Bricolage Grotesque', sans-serif, 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji';
+    color: var(--accent);
+    letter-spacing: 0.3px;
+    font-size: 1rem;
+    text-transform: uppercase;
+    font-weight: 800;
+}
+
+.panel-label {
+    font-size: 0.57rem;
+    font-family: 'Bricolage Grotesque', sans-serif, 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji';
+    color: var(--text-subtle);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    padding-bottom: 7px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 10px;
+    font-weight: 700;
+}
+
+/* ── Settings overlay ── */
+#settings-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1500;
+    display: none;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+#settings-overlay.open {
+    display: flex;
+}
+
+#settings-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(6px);
+}
+
+#settings-panel {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 560px;
+    max-height: 90vh;
+    background: var(--surface);
+    border: 1px solid var(--border-hi);
+    border-radius: 28px 28px 0 0;
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--sh3);
+    animation: springUp 0.38s var(--spring) both;
+}
+
+#settings-panel-head {
+    padding: 18px 20px 14px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+}
+
+#settings-panel-head h2 {
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+#settings-close {
+    background: var(--surface-light);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    border-radius: 100px;
+    padding: 5px 14px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: 700;
+    transition: all var(--dur-sm) var(--standard);
+}
+
+#settings-close:hover {
+    border-color: var(--danger);
+    color: var(--danger);
+}
+
+#settings-body {
+    overflow-y: auto;
+    padding: 16px 20px 36px;
+    flex: 1;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.06) transparent;
+}
+
+.sett-section-label {
+    font-size: 0.58rem;
+    font-family: 'Bricolage Grotesque', sans-serif, 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji';
+    color: var(--text-subtle);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 700;
+    margin: 18px 0 8px;
+}
+
+.sett-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    gap: 12px;
+}
+
+.sett-row-label {
+    font-size: 0.84rem;
+    font-weight: 600;
+}
+
+.sett-row-desc {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    margin-top: 1px;
+}
+
+.sett-row input[type=number] {
+    width: 72px;
+    padding: 7px 10px;
+    background: var(--bg);
+    color: var(--text);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace, 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji';
+    font-size: 0.9rem;
+    font-weight: 700;
+    outline: none;
+    transition: border-color var(--dur-sm) var(--standard);
+}
+
+.sett-row input[type=number]:focus {
+    border-color: var(--accent);
+}
+
+.drag-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.drag-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    background: var(--surface-light);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 5px;
+    user-select: none;
+    transition: background var(--dur-sm) var(--standard), border-color var(--dur-sm) var(--standard), transform var(--dur-sm) var(--spring), opacity var(--dur-sm) var(--standard);
+    font-size: 0.83rem;
+    font-weight: 600;
+}
+
+.drag-item.drag-over {
+    border-color: var(--accent);
+    background: var(--accent-dim);
+    transform: scale(1.02);
+}
+
+.drag-item.dragging {
+    opacity: 0.35;
+}
+
+.drag-handle {
+    color: var(--text-subtle);
+    font-size: 1.1rem;
+    flex-shrink: 0;
+    cursor: grab;
+    padding: 2px 4px;
+    touch-action: none;
+}
+
+.drag-idx {
+    font-family: 'JetBrains Mono', monospace, 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji';
+    font-size: 0.62rem;
+    color: var(--text-subtle);
+    min-width: 18px;
+}
+
+/* ── Section Passes Widget ── */
+.sp-mode-toggle {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 12px;
+}
+
+.sp-mode-btn {
+    flex: 1;
+    padding: 7px 10px;
+    border-radius: 100px;
+    border: 1.5px solid var(--border);
+    background: transparent;
+    color: var(--text-muted);
+    font-family: 'Bricolage Grotesque', sans-serif, 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji';
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.15s var(--spring);
+}
+
+.sp-mode-btn.active {
+    background: var(--accent-dim);
+    border-color: var(--border-accent);
+    color: var(--accent);
+}
+
+.sp-mode-hint {
+    font-size: 0.67rem;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    line-height: 1.55;
+    padding: 8px 10px;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 8px;
+    border-left: 2px solid var(--border-accent);
+}
+
+.sp-passes-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.sp-pass-block {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.sp-pass-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 10px;
+    background: rgba(255, 255, 255, 0.03);
+    border-bottom: 1px solid var(--border);
+}
+
+.sp-pass-tag {
+    font-family: 'JetBrains Mono', monospace, 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji';
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: var(--accent);
+    padding: 2px 8px;
+    background: var(--accent-dim);
+    border-radius: 100px;
+    border: 1px solid var(--border-accent);
+    text-transform: uppercase;
+}
+
+.sp-pass-del {
+    margin-left: auto;
+    background: rgba(248, 113, 113, 0.08);
+    border: 1px solid rgba(248, 113, 113, 0.22);
+    color: var(--danger);
+    border-radius: 6px;
+    padding: 2px 8px;
+    font-size: 0.62rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: background 0.13s;
+}
+
+.sp-pass-del:hover {
+    background: var(--danger);
+    color: #fff;
+    border-color: var(--danger);
+}
+
+.sp-pass-body {
+    padding: 8px;
+}
+
+.sp-add-pass-btn {
+    width: 100%;
+    padding: 8px;
+    margin-top: 10px;
+    background: var(--accent-dim);
+    border: 1.5px dashed var(--border-accent);
+    color: var(--accent);
+    border-radius: 10px;
+    font-size: 0.72rem;
+    font-weight: 800;
+    cursor: pointer;
+    font-family: 'Bricolage Grotesque', sans-serif, 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji';
+    letter-spacing: 0.5px;
+    transition: background 0.15s;
+}
+
+.sp-add-pass-btn:hover {
+    background: rgba(245, 166, 35, 0.22);
+}
+
+.sp-drag-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 10px;
+    background: var(--surface-light);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 4px;
+    user-select: none;
+    font-size: 0.8rem;
+    font-weight: 600;
+    transition: background var(--dur-sm) var(--standard), border-color var(--dur-sm) var(--standard), transform var(--dur-sm) var(--spring), opacity var(--dur-sm);
+}
+
+.sp-drag-item:last-child {
+    margin-bottom: 0;
+}
+
+.sp-drag-item.dragging {
+    opacity: 0.35;
+}
+
+.sp-drag-item.drag-over {
+    border-color: var(--accent);
+    background: var(--accent-dim);
+    transform: scale(1.02);
+}
+
+.sp-move-btn {
+    flex-shrink: 0;
+    font-family: 'JetBrains Mono', monospace, 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji';
+    font-size: 0.6rem;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 5px;
+    background: var(--surface-hover);
+    border: 1px solid var(--border);
+    color: var(--text-subtle);
+    cursor: pointer;
+    transition: all 0.12s;
+    white-space: nowrap;
+}
+
+.sp-move-btn:hover {
+    background: var(--accent-dim);
+    border-color: var(--border-accent);
+    color: var(--accent);
+}
+
+.sp-empty-hint {
+    font-size: 0.7rem;
+    color: var(--text-subtle);
+    padding: 6px 4px;
+    text-align: center;
+}
+
+.sp-move-picker {
+    position: fixed;
+    z-index: 3000;
+    background: var(--surface-light);
+    border: 1px solid var(--border-accent);
+    border-radius: 10px;
+    padding: 4px;
+    box-shadow: var(--sh2);
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 110px;
+}
+
+.sp-move-picker-opt {
+    padding: 5px 12px;
+    background: transparent;
+    border: none;
+    color: var(--text);
+    font-size: 0.78rem;
+    font-weight: 700;
+    cursor: pointer;
+    border-radius: 7px;
+    text-align: left;
+    font-family: 'JetBrains Mono', monospace, 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji';
+    transition: background 0.12s;
+}
+
+.sp-move-picker-opt:hover {
+    background: var(--accent-dim);
+    color: var(--accent);
+}
+
+
+.sett-save-btn {
+    width: 100%;
+    padding: 13px;
+    background: linear-gradient(90deg, var(--accent), #e07b00);
+    color: #000;
+    border: none;
+    border-radius: 100px;
+    font-family: 'Bricolage Grotesque', sans-serif, 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji';
+    font-size: 0.9rem;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 20px var(--accent-glow);
+    transition: transform 0.18s var(--spring), box-shadow 0.18s;
+}
+
+.sett-save-btn:hover {
+    transform: scale(1.03);
+    box-shadow: 0 6px 28px var(--accent-glow);
+}
+
+.sett-save-btn:active {
+    transform: scale(0.96);
+}
+
+/* ── Collapsible priority group ── */
+.pri-group {
+    margin-bottom: 10px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+.pri-group-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 11px 16px;
+    background: var(--surface-light);
+    cursor: pointer;
+    font-family: 'Bricolage Grotesque', sans-serif, 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji';
+    font-size: 0.76rem;
+    font-weight: 800;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    transition: background var(--dur-sm) var(--standard), color var(--dur-sm) var(--standard);
+    user-select: none;
+    gap: 8px;
+}
+
+.pri-group-head:hover {
+    background: var(--surface-hover);
+    color: var(--text);
+}
+
+.pri-group-head .pg-icon {
+    font-size: 0.85rem;
+    flex-shrink: 0;
+}
+
+.pri-group-head .pg-title {
+    flex: 1;
+}
+
+.pri-group-head .pg-arrow {
+    font-size: 0.72rem;
+    color: var(--text-subtle);
+    transition: transform var(--dur-sm) var(--standard);
+    flex-shrink: 0;
+}
+
+.pri-group.open>.pri-group-head {
+    color: var(--accent);
+    background: var(--accent-dim);
+    border-bottom: 1px solid var(--border-accent);
+}
+
+.pri-group.open>.pri-group-head .pg-arrow {
+    transform: rotate(180deg);
+    color: var(--accent);
+}
+
+.pri-group-body {
+    display: none;
+    padding: 14px 16px 16px;
+}
+
+.pri-group.open>.pri-group-body {
+    display: block;
+    animation: fadeUp var(--dur-sm) var(--decel) both;
+}
+
+.pri-group-hint {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+
+/* Nested sub-group (section priority inside chapter priority) */
+.pri-sub-group {
+    margin-top: 12px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.pri-sub-group-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    background: rgba(255, 255, 255, 0.03);
+    cursor: pointer;
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: var(--text-subtle);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    transition: color var(--dur-sm) var(--standard);
+    user-select: none;
+}
+
+.pri-sub-group-head:hover {
+    color: var(--text-muted);
+}
+
+.pri-sub-group-head .psg-arrow {
+    font-size: 0.65rem;
+    transition: transform var(--dur-sm) var(--standard);
+}
+
+.pri-sub-group.open>.pri-sub-group-head {
+    color: var(--accent);
+    border-bottom: 1px solid var(--border);
+}
+
+.pri-sub-group.open>.pri-sub-group-head .psg-arrow {
+    transform: rotate(180deg);
+}
+
+.pri-sub-group-body {
+    display: none;
+    padding: 10px 12px 12px;
+}
+
+.pri-sub-group.open>.pri-sub-group-body {
+    display: block;
+    animation: fadeUp var(--dur-sm) var(--decel) both;
+}
+
+/* ── AutoTarget toggle ── */
+.autotarget-toggle-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    background: linear-gradient(135deg, rgba(168, 139, 250, 0.12), rgba(99, 102, 241, 0.08));
+    border: 1.5px solid rgba(168, 139, 250, 0.35);
+    border-radius: 16px;
+    margin-bottom: 4px;
+    cursor: pointer;
+    transition: border-color var(--dur-sm) var(--standard), background var(--dur-sm) var(--standard);
+}
+
+.autotarget-toggle-wrap:hover {
+    border-color: rgba(168, 139, 250, 0.6);
+    background: linear-gradient(135deg, rgba(168, 139, 250, 0.18), rgba(99, 102, 241, 0.12));
+}
+
+.autotarget-toggle-wrap.on {
+    border-color: #a78bfa;
+    background: linear-gradient(135deg, rgba(168, 139, 250, 0.22), rgba(99, 102, 241, 0.15));
+    animation: glowPulse 2.5s var(--standard) infinite;
+    --sc: #a78bfa;
+}
+
+.at-label {
+    font-family: 'Bricolage Grotesque', sans-serif, 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji';
+    font-size: 0.82rem;
+    font-weight: 800;
+    letter-spacing: 0.3px;
+}
+
+.at-label.on {
+    background: linear-gradient(90deg, #a78bfa, #818cf8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.at-desc {
+    font-size: 0.68rem;
+    color: var(--text-muted);
+    margin-top: 2px;
+    line-height: 1.4;
+}
+
+.at-switch {
+    position: relative;
+    width: 46px;
+    height: 26px;
+    flex-shrink: 0;
+}
+
+.at-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    position: absolute;
+}
+
+.at-slider {
+    position: absolute;
+    inset: 0;
+    border-radius: 100px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1.5px solid rgba(255, 255, 255, 0.15);
+    transition: background 0.25s, border-color 0.25s;
+    cursor: pointer;
+}
+
+.at-slider::before {
+    content: '';
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    left: 3px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-radius: 50%;
+    background: #888;
+    transition: transform 0.25s var(--spring), background 0.25s;
+}
+
+.at-switch input:checked+.at-slider {
+    background: linear-gradient(90deg, #a78bfa, #6366f1);
+    border-color: #a78bfa;
+}
+
+.at-switch input:checked+.at-slider::before {
+    transform: translateX(20px) translateY(-50%);
+    background: #fff;
+}
+
+/* ── Editor add/delete controls ── */
+.ed-del-btn {
+    flex-shrink: 0;
+    background: rgba(248, 113, 113, 0.08);
+    border: 1px solid rgba(248, 113, 113, 0.22);
+    color: var(--danger);
+    border-radius: 8px;
+    padding: 3px 9px;
+    font-size: 0.72rem;
+    font-weight: 800;
+    cursor: pointer;
+    margin-right: 8px;
+    transition: background var(--dur-sm) var(--standard), color var(--dur-sm) var(--standard);
+}
+
+.ed-del-btn:hover {
+    background: var(--danger);
+    color: #fff;
+    border-color: var(--danger);
+}
+
+.ed-add-row {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top: 1px dashed rgba(255, 255, 255, 0.08);
+}
+
+.ed-add-row input[type=text] {
+    flex: 1;
+    padding: 6px 10px;
+    background: var(--bg);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 0.8rem;
+    outline: none;
+    transition: border-color var(--dur-sm) var(--standard);
+}
+
+.ed-add-row input[type=text]:focus {
+    border-color: var(--accent);
+}
+
+.ed-add-row input[type=number] {
+    width: 58px;
+    padding: 6px 8px;
+    background: var(--bg);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 0.8rem;
+    text-align: center;
+    outline: none;
+    transition: border-color var(--dur-sm) var(--standard);
+}
+
+.ed-add-row input[type=number]:focus {
+    border-color: var(--accent);
+}
+
+.ed-add-btn {
+    flex-shrink: 0;
+    background: var(--accent-dim);
+    border: 1.5px solid var(--border-accent);
+    color: var(--accent);
+    border-radius: 8px;
+    padding: 5px 12px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    cursor: pointer;
+    font-family: 'Bricolage Grotesque', sans-serif, 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji';
+    transition: background var(--dur-sm) var(--standard);
+}
+
+.ed-add-btn:hover {
+    background: var(--accent);
+    color: #000;
+    border-color: var(--accent);
+}
+
+.ed-add-chapter-wrap {
+    margin-top: 12px;
+    padding: 12px 14px;
+    background: var(--surface);
+    border: 1px dashed rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+}
+
+.ed-add-chapter-wrap .ed-add-row input[type=text] {
+    font-weight: 700;
+}
+
+/* ── Fixed Total Combat bar ── */
+#want-more-btn {
+    width: 100%;
+    padding: 14px 20px;
+    margin-top: 10px;
+    background: linear-gradient(135deg, rgba(168, 139, 250, 0.13), rgba(99, 102, 241, 0.08));
+    border: 1.5px solid rgba(168, 139, 250, 0.38);
+    border-radius: var(--r);
+    cursor: pointer;
+    font-family: 'Bricolage Grotesque', sans-serif, 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji';
+    font-size: 0.88rem;
+    font-weight: 800;
+    color: #a78bfa;
+    letter-spacing: 0.5px;
+    transition: background var(--dur-sm) var(--standard), border-color var(--dur-sm) var(--standard), transform var(--dur-md) var(--spring);
+}
+
+#want-more-btn:hover {
+    background: rgba(168, 139, 250, 0.22);
+    border-color: #a78bfa;
+    transform: scale(1.02);
+}
+
+#want-more-btn:active {
+    transform: scale(0.97);
+}
+
+#combat-bar-fixed {
+    position: fixed;
+    bottom: 70px;
+    left: 0;
+    right: 0;
+    z-index: 90;
+    padding: 0 14px 8px;
+    background: linear-gradient(to bottom, transparent 0%, var(--bg) 38%);
+    pointer-events: none;
+}
+
+#combat-bar-fixed .card {
+    pointer-events: all;
+}
+
+/* Always hide desktop-only elements on mobile */
+.sidebar-brand {
+    display: none;
+}
+
+#desktop-right-panel {
+    display: none;
+}
+
+#header-day-strip {
+    display: none;
+}
+
+#btn-settings-sidebar {
+    display: none;
+}
+
+#nav-spacer {
+    display: none;
+}
+
+/* ── DESKTOP LAYOUT (≥820px) ── */
+@media (min-width: 820px) {
+    body {
+        padding-bottom: 0;
+        padding-left: 196px;
+        padding-right: 268px;
+    }
+
+    /* Left Sidebar */
+    .bottom-nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: auto;
+        width: 196px;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: stretch;
+        padding: 0 0 20px;
+        border-top: none;
+        border-right: 1px solid var(--border);
+        background: var(--surface);
+        overflow-y: auto;
+    }
+
+    .sidebar-brand {
+        display: block;
+        padding: 18px 14px 15px;
+        border-bottom: 1px solid var(--border);
+        margin-bottom: 6px;
+        font-family: 'Bricolage Grotesque', sans-serif, 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji';
+        color: var(--accent);
+        font-size: 1.1rem;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        line-height: 1.35;
+        font-weight: 800;
+    }
+
+    .sidebar-brand .sb-sub {
+        display: block;
+        font-size: 0.54rem;
+        color: var(--text-subtle);
+        letter-spacing: 1.5px;
+        margin-top: 4px;
+        font-family: 'Nunito', sans-serif, 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji';
+        text-transform: uppercase;
+        font-weight: 600;
+    }
+
+    .nav-item {
+        flex-direction: row;
+        justify-content: flex-start;
+        gap: 9px;
+        padding: 8px 10px 8px 14px;
+        font-size: 0.73rem;
+        border-radius: 100px;
+        margin: 2px 8px;
+        width: auto;
+        border: none;
+        transition: background var(--dur) var(--ease), color var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+    }
+
+    .nav-item i {
+        font-size: 0.92rem;
+    }
+
+    .nav-item.active {
+        background: var(--accent-dim);
+        color: var(--accent);
+        border-color: transparent;
+        background: var(--accent-dim);
+        color: var(--accent);
+        box-shadow: none;
+    }
+
+    .nav-item:hover:not(.active) {
+        background: rgba(255, 255, 255, 0.03);
+        color: var(--text);
+    }
+
+    #btn-settings-sidebar {
+        display: flex;
+    }
+
+    #nav-spacer {
+        display: block;
+    }
+
+    /* Right Command Center */
+    #desktop-right-panel {
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        width: 268px;
+        background: var(--surface);
+        border-left: 1px solid var(--border);
+        overflow-y: auto;
+        z-index: 50;
+        padding: 0 13px 20px;
+        scrollbar-width: thin;
+        scrollbar-color: rgba(255, 255, 255, 0.06) transparent;
+    }
+
+    /* Header */
+    .header {
+        text-align: left;
+        padding: 11px 18px 0;
+        border-bottom: none;
+        box-shadow: none;
+    }
+
+    .header h1 {
+        font-size: 0.88rem;
+    }
+
+    .header .subtitle {
+        font-size: 0.7rem;
+    }
+
+    .header .controls {
+        display: none;
+    }
+
+    #header-day-strip {
+        display: flex;
+        gap: 4px;
+        padding: 9px 0 10px;
+        overflow-x: auto;
+        scrollbar-width: none;
+        border-bottom: 1px solid var(--border);
+    }
+
+    #header-day-strip::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* Schedule: JS-balanced 3 columns via .sched-cols wrapper */
+    #schedule-content {
+        display: block;
+        padding-bottom: 70px;
+    }
+
+    .sched-cols {
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+    }
+
+    .sched-col {
+        flex: 1 1 0;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .sched-col .card {
+        margin-bottom: 0;
+    }
+
+    #combat-bar-fixed {
+        bottom: 0;
+        left: 196px;
+        right: 268px;
+        padding: 8px 18px 10px;
+    }
+
+    /* Card entrance stagger in columns */
+    .sched-col .card {
+        animation: cardIn var(--dur-md) var(--decel) both;
+        animation-delay: calc(var(--ci, 0) * 60ms);
+    }
+
+    .vis-col .card {
+        animation: cardIn var(--dur-md) var(--decel) both;
+        animation-delay: calc(var(--ci, 0) * 50ms);
+    }
+
+    /* Dense desktop rows */
+    .task-item {
+        padding: 6px 13px;
+    }
+
+    .task-title {
+        font-size: 0.82rem;
+    }
+
+    .task-meta {
+        font-size: 0.69rem;
+    }
+
+    .card-header {
+        padding: 8px 13px 8px 20px;
+    }
+
+    .task-action {
+        padding: 4px 12px;
+        font-size: 0.67rem;
+    }
+
+    /* Visualizer */
+    #vis-nav {
+        display: none !important;
+    }
+
+    #vis-content.all-res-grid {
+        display: flex;
+        gap: 14px;
+        align-items: flex-start;
+    }
+
+    #vis-content.all-res-grid .vis-col {
+        flex: 1 1 0;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+    }
+
+    #vis-content.all-res-grid .vis-res-card {
+        margin-bottom: 0;
+    }
+
+    /* Stats & Editor */
+    #stats-layout {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+        align-items: start;
+    }
+
+    #editor-layout {
+        display: grid;
+        grid-template-columns: 280px 1fr;
+        gap: 14px;
+        align-items: start;
+    }
+
+    .container {
+        padding: 16px 18px 80px;
+        max-width: none;
+    }
+
+    .modal {
+        max-width: 480px;
+    }
+
+    /* Hide mobile command centre on desktop */
+    #mobile-cc-sheet,
+    #mobile-cc-backdrop,
+    #mobile-cc-pull-hint {
+        display: none !important;
+    }
+}
+
+/* ══ MOBILE COMMAND CENTRE SHEET ══ */
+
+/* Subtle pull hint pill at the very top */
+#mobile-cc-pull-hint {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, 0);
+    z-index: 190;
+    padding: 6px 18px 7px;
+    background: var(--surface);
+    border: 1px solid var(--border-hi);
+    border-top: none;
+    border-radius: 0 0 20px 20px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 0.6rem;
+    font-family: 'Bricolage Grotesque', sans-serif, 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji';
+    color: var(--text-subtle);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-weight: 700;
+    pointer-events: auto;
+    cursor: pointer;
+    user-select: none;
+    box-shadow: var(--sh1);
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+#mobile-cc-pull-hint .hint-bar {
+    width: 28px;
+    height: 3px;
+    background: var(--text-subtle);
+    border-radius: 2px;
+}
+
+/* Dim backdrop */
+#mobile-cc-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0);
+    z-index: 200;
+    pointer-events: none;
+    transition: background 0.35s ease;
+}
+
+#mobile-cc-backdrop.visible {
+    background: rgba(0, 0, 0, 0.62);
+    pointer-events: all;
+    backdrop-filter: blur(4px);
+}
+
+/* The sheet itself */
+#mobile-cc-sheet {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 210;
+    max-height: 82vh;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border-hi);
+    border-radius: 0 0 28px 28px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.75);
+    overflow: hidden;
+    /* starts fully above screen */
+    transform: translateY(-100%);
+    will-change: transform;
+    /* spring transition applied by JS when releasing */
+}
+
+#mobile-cc-sheet.spring-open {
+    transition: transform 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+#mobile-cc-sheet.spring-close {
+    transition: transform 0.38s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Drag handle inside sheet */
+#mobile-cc-handle {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    padding: 12px 0 4px;
+    cursor: grab;
+}
+
+#mobile-cc-handle .handle-pill {
+    width: 38px;
+    height: 4px;
+    background: var(--text-subtle);
+    border-radius: 2px;
+}
+
+#mobile-cc-handle .handle-label {
+    font-family: 'JetBrains Mono', monospace, 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji';
+    font-size: 0.55rem;
+    color: var(--accent);
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+/* Scrollable inner content */
+#mobile-cc-inner {
+    overflow-y: auto;
+    max-height: calc(82vh - 58px);
+    padding: 0 13px 18px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.07) transparent;
+}
+
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: .4;
+        transform: scale(.95)
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.05)
+    }
+}
