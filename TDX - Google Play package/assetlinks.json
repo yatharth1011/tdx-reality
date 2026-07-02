@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "app.web.tdx_reality.twa",
+        "sha256_cert_fingerprints": ["58:AD:CA:9F:C3:55:71:31:10:69:2E:4B:C9:5E:7C:DB:7C:A3:76:6B:FE:28:0D:6E:67:AB:39:EC:3E:92:E6:DB"]
+      }
+    }]

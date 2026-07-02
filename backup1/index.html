@@ -1,0 +1,258 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>TDX Reality Engine v19</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Nunito:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="amoled" \>
+
+    <!-- ══ MOBILE COMMAND CENTRE SHEET ══ -->
+    <div id="mobile-cc-pull-hint" onclick="openCC()">
+        <div class="hint-bar"></div>
+        CMD
+    </div>
+    <div id="mobile-cc-backdrop" onclick="closeMobileCC()"></div>
+    <div id="mobile-cc-sheet">
+        <div id="mobile-cc-handle">
+            <div class="handle-pill"></div>
+            <div class="handle-label">⚡ Command Centre</div>
+        </div>
+        <div id="mobile-cc-inner">
+            <!-- content mirrored from drp-content -->
+            <div style="color:var(--text-muted); font-size:0.8rem; text-align:center; margin-top:20px;">Loading…</div>
+        </div>
+    </div>
+
+    <!-- ⚡ Loading Overlay — hidden immediately by init() -->
+    <div id="loading-overlay" style="
+        position: fixed; inset: 0; background: #07090d; z-index: 99999;
+        display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px;
+    ">
+        <div style="font-size: 2.5rem; animation: pulse 1.4s ease-in-out infinite;">⚡</div>
+        <div style="font-family:'Bricolage Grotesque',sans-serif; color:#f5a623; letter-spacing:2px; font-size:0.95rem; text-transform:uppercase; font-weight:800;">
+            Loading TDX Reality Engine v18
+        </div>
+        <div style="font-size:0.72rem; color:#44445a; letter-spacing:1px; margin-top:2px;">Reading your battle data…</div>
+    </div>
+
+    <!-- Header -->
+    <div class="header" id="main-header">
+        <h1 id="header-title">📅 DATE</h1>
+        <div class="subtitle" id="header-subtitle">DAY TYPE</div>
+        <div class="controls">
+            <button class="btn-icon" onclick="changeDay(-1)" title="Previous day" style="padding:8px 14px;">◄</button>
+            <button class="btn-icon" onclick="goToToday()" title="Today" style="background:var(--accent);color:#000;border:none;font-weight:700;padding:8px 14px;">◉</button>
+            <button class="btn-icon" onclick="changeDay(1)" title="Next day" style="padding:8px 14px;">►</button>
+            <button class="btn-icon" onclick="openDroplet()" title="Mood Settings" style="padding:8px 13px; position:absolute;left:0;">🪷</button>
+            <button class="btn-icon" onclick="openSettings()" style="position:absolute;right:0;padding:8px 12px;" title="Settings">⚙️</button>
+        </div>
+        <div id="header-day-strip"></div>
+    </div>
+
+    <!-- MAIN VIEWS -->
+    
+    <!-- 1. Schedule View -->
+    <div id="view-schedule" class="container active">
+        <div id="schedule-content"></div>
+    </div>
+
+    <!-- 2. Custom Task View -->
+    <div id="view-custom" class="container">
+        <h2 style="margin-top:0;">🌲 Custom Task Selector</h2>
+        <select id="custom-subj" onchange="customSubjChanged()">
+            <option value="">-- Select Subject --</option>
+        </select>
+        <select id="custom-chap" onchange="customChapChanged()" style="display:none;">
+            <option value="">-- Select Chapter --</option>
+        </select>
+        <div id="custom-sec-container"></div>
+    </div>
+
+    <!-- 3. Visualizer View -->
+    <div id="view-visualize" class="container">
+        <div id="vis-nav" style="display:none;"></div>
+        <div id="vis-title" style="display:none;"></div>
+        <div id="vis-content"></div>
+    </div>
+
+    <!-- 4. Stats View -->
+    <div id="view-stats" class="container">
+        <h2 style="margin-top:0;">📊 Cumulative Stats</h2>
+        <div id="stats-layout">
+            <div>
+                <div class="card" style="padding: 15px;" id="stats-content"></div>
+                <div id="stats-badges"></div>
+            </div>
+            <div id="stats-extra"></div>
+        </div>
+        <button class="btn btn-danger" onclick="undoLastLog()" id="btn-undo" style="margin-top:16px;">↩️ Undo Last Log</button>
+    </div>
+
+    <!-- 5. Data Editor View -->
+    <div id="view-editor" class="container">
+        <h2 style="margin-top:0;">📝 Raw Data Editor</h2>
+        <div id="editor-layout">
+            <div>
+                <div class="panel-label" style="margin-top:0;">Manage Resources</div>
+                <div id="editor-resource-list" style="margin-bottom:10px;"></div>
+                <button class="btn" style="margin-bottom:12px; font-size:0.8rem; padding:8px 14px;" onclick="openAddResourceForm()">➕ Add New Resource</button>
+                <div id="add-resource-form" style="display:none; background:var(--surface-light); border:1px solid var(--border); border-radius:14px; padding:12px; margin-bottom:12px;">
+                    <div style="font-size:0.7rem;color:var(--text-muted);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">New Resource</div>
+                    <input type="text" id="ares-name" placeholder="Display name (e.g. 📚 HC Verma)" style="width:100%;padding:7px 10px;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:8px;font-size:0.83rem;outline:none;margin-bottom:6px;">
+                    <select id="ares-subj" style="margin-bottom:8px;">
+                        <option value="physics">🧲 Physics</option>
+                        <option value="math">🧮 Mathematics</option>
+                        <option value="pc">⚗️ Physical Chemistry</option>
+                        <option value="ioc">🧬 Inorganic Chemistry</option>
+                        <option value="oc">🧪 Organic Chemistry</option>
+                        <option value="extra">📦 Extra / Other</option>
+                    </select>
+                    <div style="display:flex;gap:6px;">
+                        <button class="ed-add-btn" style="flex:1;" onclick="editorAddResource()">✔ Add</button>
+                        <button class="ed-del-btn" style="flex:1;border-color:var(--border);color:var(--text-muted);margin-right:0;" onclick="document.getElementById('add-resource-form').style.display='none'">✕ Cancel</button>
+                    </div>
+                </div>
+                <div class="panel-label">Edit Chapters & Sections</div>
+                <p style="font-size: 0.82rem; color: var(--text-muted); margin-top:0; margin-bottom:8px;">Select a resource to edit its data.</p>
+                <select id="editor-file" onchange="renderEditor()">
+                    <option value="">-- Select Resource --</option>
+                </select>
+                <button class="btn btn-primary" style="margin-top: 6px;" onclick="saveEditorData()">💾 Save & Rebuild Matrix</button>
+                <button class="btn" style="margin-top: 8px;" onclick="factoryReset()">⚠️ Factory Reset Data</button>
+            </div>
+            <div>
+                <div id="editor-content"></div>
+                <div id="editor-add-chapter-area"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FIXED TOTAL COMBAT BAR -->
+    <div id="combat-bar-fixed"></div>
+
+    <!-- DESKTOP RIGHT PANEL -->
+    <div id="desktop-right-panel">
+        <div style="font-family:'JetBrains Mono',monospace; color:var(--accent); font-size:0.6rem; letter-spacing:2.5px; text-transform:uppercase; padding:16px 0 11px; border-bottom:1px solid var(--border); margin-bottom:4px; display:flex; align-items:center; justify-content:space-between;">
+            Command Center
+            <button onclick="openDroplet()" title="Mood Settings" style="background:rgba(30,30,35,0.7); border:1px solid var(--border-hi); color:#fff; border-radius:100px; padding:5px 12px; cursor:pointer; font-size:0.78rem; font-weight:800; font-family:'Bricolage Grotesque',sans-serif; letter-spacing:0.5px; display:flex; align-items:center; gap:6px; transition:background 0.15s, border-color 0.15s;" onmouseover="this.style.borderColor='rgba(255,255,255,0.3)';this.style.background='rgba(50,50,55,0.85)'" onmouseout="this.style.borderColor='';this.style.background='rgba(30,30,35,0.7)'">🪷 <span style="text-transform:uppercase; font-size:0.65rem; letter-spacing:1px;">Mood</span></button>
+        </div>
+        <div id="drp-content"><div style="color:var(--text-muted); font-size:0.8rem; text-align:center; margin-top:40px;">Loading…</div></div>
+    </div>
+
+    <!-- BOTTOM NAVBAR / DESKTOP SIDEBAR -->
+    <div class="bottom-nav">
+        <div class="sidebar-brand">⚡ TDX<span class="sb-sub">Reality Engine</span></div>
+        <button class="nav-item active" onclick="switchTab('schedule')" id="tab-schedule"><i>📅</i><span>Schedule</span></button>
+        <button class="nav-item" onclick="switchTab('custom')" id="tab-custom"><i>🌲</i><span>Custom</span></button>
+        <button class="nav-item" onclick="switchTab('visualize')" id="tab-visualize"><i>📖</i><span>Visualise</span></button>
+        <button class="nav-item" onclick="switchTab('stats')" id="tab-stats"><i>📊</i><span>Stats</span></button>
+        <button class="nav-item" onclick="switchTab('editor')" id="tab-editor"><i>📝</i><span>Editor</span></button>
+        <div id="nav-spacer" style="flex:1;"></div>
+        <button class="nav-item" id="btn-settings-sidebar" onclick="openSettings()"><i>⚙️</i><span>Settings</span></button>
+    </div>
+
+    <!-- SETTINGS OVERLAY -->
+    <div id="settings-overlay">
+        <div id="settings-backdrop" onclick="closeSettings()"></div>
+        <div id="settings-panel">
+            <div id="settings-panel-head">
+                <h2>⚙️ Settings</h2>
+                <button id="settings-close" onclick="closeSettings()">✕ Close</button>
+            </div>
+            <div id="settings-body"></div>
+        </div>
+    </div>
+
+    <!-- TRIUMPH CAROUSEL -->
+    <div id="triumph-overlay">
+        <div class="triumph-bg"></div>
+        <div class="triumph-rays"></div>
+        <div class="triumph-glow-ring"></div>
+        <div class="triumph-card">
+            <div id="triumph-slides"></div>
+            <div class="triumph-dots" id="triumph-dots"></div>
+            <button class="triumph-btn" id="triumph-btn" onclick="triumphNext()">NEXT &#9654;</button>
+        </div>
+    </div>
+
+    
+    <div id="droplet-overlay" class="modal-overlay" style="align-items:flex-end; justify-content:center; padding:0; display:none;">
+        <div id="droplet-backdrop" onclick="closeDroplet()" style="position:absolute; inset:0; background:rgba(0,0,0,0.75); backdrop-filter:blur(6px);"></div>
+        <div id="droplet-panel" style="position:relative; width:100%; max-width:560px; background:var(--surface); border:1px solid var(--border-hi); border-radius:28px 28px 0 0; padding:24px; animation:springUp 0.38s var(--spring) both; max-height:85vh; overflow-y:auto; z-index:1; scrollbar-width:none;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                <h2 style="margin:0; font-size:1.1rem; color:#f472b6;">🪷 Droplet Engine</h2>
+                <button onclick="closeDroplet()" style="background:var(--surface-light); border:1px solid var(--border); color:var(--text-muted); border-radius:100px; padding:5px 14px; cursor:pointer; font-size:0.8rem; font-weight:700;">✕</button>
+            </div>
+            
+            <div style="background:var(--surface-light); border:1px solid var(--border); border-radius:16px; padding:16px; margin-bottom:16px;">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <div>
+                        <div style="font-size:0.9rem; font-weight:800; color:#a3e635;">Optimal Campaign Porosity</div>
+                        <div style="font-size:0.7rem; color:var(--text-muted); margin-top:2px; line-height:1.4;">Minimizes X (in "1 in X") evenly across ALL subjects globally using gradient descent. Replaces subject-uniform porosity.</div>
+                    </div>
+                    <label class="at-switch" style="margin-left:12px;">
+                        <input type="checkbox" id="droplet-optimal">
+                        <span class="at-slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div style="background:var(--surface-light); border:1px solid var(--border); border-radius:16px; padding:16px; margin-bottom:16px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                    <div>
+                        <div style="font-size:0.9rem; font-weight:800; color:#38bdf8;">Today's Subject Mood</div>
+                        <div style="font-size:0.7rem; color:var(--text-muted); margin-top:2px; line-height:1.4;">Override today's task distribution without changing your total daily cap.</div>
+                    </div>
+                    <label class="at-switch" style="margin-left:12px;">
+                        <input type="checkbox" id="mood-active" onchange="renderMoodSliders()">
+                        <span class="at-slider"></span>
+                    </label>
+                </div>
+                
+                <div id="mood-sliders-container"></div>
+                
+                <div style="margin-top:16px; padding-top:16px; border-top:1px dashed var(--border);">
+                    <div style="font-size:0.65rem; text-transform:uppercase; letter-spacing:1px; color:var(--text-subtle); margin-bottom:8px; font-weight:800;">Tradeoff Analysis (Future Impact)</div>
+                    <div id="mood-tradeoffs"></div>
+                </div>
+            </div>
+            
+            <button class="btn btn-primary" style="width:100%; padding:14px; font-size:1rem;" onclick="applyDroplet()">Apply & Rebuild</button>
+        </div>
+    </div>
+    <!-- INPUT MODAL -->
+    <div class="modal-overlay" id="input-modal">
+        <div class="modal">
+            <h2 id="modal-title">Log Task</h2>
+            <p id="modal-desc" style="font-size: 0.9rem; color: var(--text-muted);"></p>
+            <input type="number" id="modal-input" placeholder="Questions Done" min="0" step="1">
+            <div id="modal-porosity-row" style="display:none; margin-bottom:10px;">
+                <div style="font-size:0.78rem; color:var(--text-muted); margin-bottom:8px; font-weight:600;">Did you do this porously?</div>
+                <div style="display:flex; gap:8px; align-items:center;">
+                    <label style="display:flex; align-items:center; gap:6px; font-size:0.82rem; cursor:pointer;">
+                        <input type="radio" name="porous-choice" id="porous-no" value="no" checked onchange="updatePorosityInput()"> All questions
+                    </label>
+                    <label style="display:flex; align-items:center; gap:6px; font-size:0.82rem; cursor:pointer;">
+                        <input type="radio" name="porous-choice" id="porous-yes" value="yes" onchange="updatePorosityInput()"> 1 in X
+                    </label>
+                    <div id="porous-x-wrap" style="display:none; align-items:center; gap:6px; margin-left:4px;">
+                        <span style="font-size:0.78rem; color:var(--text-muted);">X =</span>
+                        <input type="number" id="porous-x" min="2" step="1" value="2" style="width:54px; padding:5px; background:var(--bg); color:var(--text); border:1px solid var(--border); border-radius:8px; text-align:center; font-family:'JetBrains Mono',monospace; font-size:0.9rem;">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-buttons">
+                <button class="btn" onclick="closeModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="submitModal()">Log Progress</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

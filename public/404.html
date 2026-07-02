@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 • TDX Reality Engine</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400..800&family=JetBrains+Mono:wght@400;700&family=Nunito:wght@400..700&display=swap" rel="stylesheet">
+
+    <!-- Your existing stylesheet -->
+    <link rel="stylesheet" href="styles.css">
+
+    <style>
+        body{
+            margin:0;
+            background:var(--bg);
+            color:var(--text);
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            min-height:100vh;
+            overflow:hidden;
+        }
+
+        .noise{
+            position:fixed;
+            inset:0;
+            pointer-events:none;
+            opacity:.05;
+            background-image:
+                radial-gradient(circle at 20% 20%, var(--accent) 1px, transparent 1px),
+                radial-gradient(circle at 80% 60%, white 1px, transparent 1px);
+            background-size:90px 90px;
+        }
+
+        .glow{
+            position:fixed;
+            width:700px;
+            height:700px;
+            border-radius:50%;
+            background:radial-gradient(circle,var(--accent-glow),transparent 70%);
+            filter:blur(90px);
+            opacity:.4;
+            animation:pulse 5s ease-in-out infinite;
+            pointer-events:none;
+        }
+
+        .panel{
+            width:min(520px,92vw);
+            background:var(--surface);
+            border:1px solid var(--border-hi);
+            border-radius:28px;
+            padding:42px;
+            text-align:center;
+            box-shadow:var(--sh3);
+            animation:popIn .45s var(--spring) both;
+            position:relative;
+            z-index:2;
+        }
+
+        .badge{
+            display:inline-block;
+            padding:7px 14px;
+            border-radius:999px;
+            background:var(--accent-dim);
+            border:1px solid var(--border-accent);
+            color:var(--accent);
+            font-family:var(--font-mono);
+            font-size:.72rem;
+            letter-spacing:2px;
+            text-transform:uppercase;
+            margin-bottom:24px;
+        }
+
+        .icon{
+            font-size:3rem;
+            margin-bottom:12px;
+        }
+
+        .code{
+            font-family:var(--font-head);
+            font-size:6rem;
+            font-weight:800;
+            line-height:1;
+            color:var(--accent);
+            margin:0;
+            letter-spacing:-4px;
+        }
+
+        h2{
+            margin:18px 0 10px;
+            font-size:1.15rem;
+            letter-spacing:2px;
+        }
+
+        p{
+            color:var(--text-muted);
+            line-height:1.7;
+            margin:0 auto 32px;
+            max-width:420px;
+        }
+
+        .actions{
+            display:flex;
+            gap:12px;
+            justify-content:center;
+            flex-wrap:wrap;
+        }
+
+        .footer{
+            margin-top:26px;
+            font-family:var(--font-mono);
+            font-size:.72rem;
+            color:var(--text-subtle);
+            letter-spacing:1px;
+        }
+
+        @media(max-width:600px){
+            .panel{
+                padding:32px 24px;
+            }
+
+            .code{
+                font-size:4.5rem;
+            }
+
+            .actions{
+                flex-direction:column;
+            }
+
+            .actions .btn{
+                width:100%;
+                margin:0;
+            }
+        }
+    </style>
+</head>
+
+<body class="theme-amoled">
+
+<div class="noise"></div>
+<div class="glow"></div>
+
+<div class="panel">
+
+    <div class="badge">Reality Engine</div>
+
+    <div class="icon">⚡</div>
+
+    <h1 class="code">404</h1>
+
+    <h2>TRANSMISSION LOST</h2>
+
+    <p>
+        The requested route does not exist inside the Reality Engine.
+        It may have been moved, deleted, or never deployed.
+    </p>
+
+    <div class="actions">
+        <button class="btn btn-primary"
+            onclick="location.href='/'">
+            ← Return Home
+        </button>
+
+        <button class="btn"
+            onclick="location.reload()">
+            ↻ Reload
+        </button>
+    </div>
+
+    <div class="footer">
+        ERR_ROUTE_NOT_FOUND
+    </div>
+
+</div>
+
+</body>
+</html>
