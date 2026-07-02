@@ -61,7 +61,7 @@ To run the TDX Reality Engine locally or deploy it to your own Firebase project,
 ### 1. Clone the repository
 
 ```bash
-git clone [https://github.com/yatharth1011/tdx-reality.git](https://github.com/yatharth1011/tdx-reality.git)
+git clone https://github.com/yatharth1011/tdx-reality.git
 cd tdx-reality
 
 ```
