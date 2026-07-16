@@ -11,9 +11,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400..800&family=JetBrains+Mono:wght@400;700&family=Noto+Color+Emoji&family=Nunito:wght@400..700&family=Space+Grotesk:wght@400..700&family=Inter:wght@400..700&family=Outfit:wght@400..800&family=Fira+Code:wght@400;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400..800&family=JetBrains+Mono:wght@400;700&family=Noto+Color+Emoji&family=Nunito:wght@400..700&family=Space+Grotesk:wght@400..700&family=Inter:wght@400..700&family=Outfit:wght@400..800&family=Fira+Code:wght@400;700&family=Press+Start+2P&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=20260716">
     <link rel="icon" type="image/svg+xml"
         href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
 
@@ -82,7 +82,7 @@
 
     <!-- Header -->
     <div class="header" id="main-header">
-        <h1 id="header-title">📅 DATE</h1>
+        <h1 id="header-title">🗓️ DATE</h1>
         <div class="subtitle" id="header-subtitle">DAY TYPE</div>
 
         <!-- Mobile Profile UI (Now Centered Above Controls) -->
@@ -91,7 +91,7 @@
         <div class="controls">
             <button class="btn-icon" onclick="changeDay(-1)" title="Previous day" style="padding:8px 14px;">◄</button>
             <button class="btn-icon" onclick="goToToday()" title="Today"
-                style="background:var(--accent);color:#000;border:none;font-weight:700;padding:8px 14px;">◉</button>
+                style="background:var(--accent);color:#000;border:none;font-weight:700;padding:8px 14px;">⚔️</button>
             <button class="btn-icon" onclick="changeDay(1)" title="Next day" style="padding:8px 14px;">►</button>
             <button class="btn-icon" onclick="openDroplet()" title="Mood Settings"
                 style="padding:8px 13px; position:absolute;left:0;">🪷</button>
@@ -130,6 +130,11 @@
         <div id="vis-content"></div>
     </div>
 
+    <!-- 6. Brainboard View -->
+    <div id="view-brainboard" class="container">
+        <div id="brainboard-content"></div>
+    </div>
+
     <!-- 4. Stats View -->
     <div id="view-stats" class="container">
         <h2 style="margin-top:0;">📊 Cumulative Stats</h2>
@@ -144,12 +149,19 @@
             Log</button>
     </div>
 
+    <!-- 7. Library View -->
+    <div id="view-library" class="container">
+        <div id="library-content"></div>
+    </div>
+
     <!-- 5. Data Editor View -->
     <div id="view-editor" class="container">
         <h2 style="margin-top:0;">📝 Raw Data Editor</h2>
         <div id="editor-layout">
             <div>
                 <div class="panel-label" style="margin-top:0;">Manage Resources</div>
+                <input type="text" id="editor-resource-search" placeholder="🔍 Search resources…" oninput="renderEditorResourceList(this.value)"
+                    style="width:100%; padding:8px 12px; margin-bottom:8px; background:var(--bg); color:var(--text); border:1px solid var(--border); border-radius:8px; font-size:0.8rem; outline:none;">
                 <div id="editor-resource-list" style="margin-bottom:10px;"></div>
                 <div style="display:flex; gap:8px; margin-bottom:12px;">
                     <button class="btn" style="flex:1; margin-bottom:0; font-size:0.75rem; padding:8px;"
@@ -157,6 +169,8 @@
                     <button class="btn" style="flex:1; margin-bottom:0; font-size:0.75rem; padding:8px;"
                         onclick="openManageSubjectsForm()">🏷️ Subjects</button>
                 </div>
+                <button class="btn btn-danger" style="width:100%; margin-bottom:12px; font-size:0.75rem; padding:8px;"
+                    onclick="openDeadlineManager()" title="Optional per-exercise due dates. Anything left unset uses the Campaign End Date.">⏰ Manage Deadlines</button>
 
                 <!-- Manage Subjects Form -->
                 <div id="manage-subjects-form"
@@ -231,14 +245,12 @@
                 </div>
 
                 <div class="panel-label">Edit Chapters & Sections</div>
-                <p style="font-size: 0.82rem; color: var(--text-muted); margin-top:0; margin-bottom:8px;">Select a
-                    resource to edit its data.</p>
-                <select id="editor-file" onchange="renderEditor()">
-                    <option value="">-- Select Resource --</option>
-                </select>
-                <button class="btn btn-primary" style="margin-top: 6px;" onclick="saveEditorData()">💾 Save & Rebuild
-                    Matrix</button>
-                <button class="btn" style="margin-top: 8px;" onclick="factoryReset()">⚠️ Factory Reset Data</button>
+                <input type="hidden" id="editor-file" value="">
+                <div id="editor-currently-editing" style="font-size:0.82rem; color:var(--text-muted); background:var(--surface-light); border:1px dashed var(--border); border-radius:8px; padding:9px 12px; margin-bottom:8px;">
+                    Click ✏️ next to a resource above to edit it.
+                </div>
+                <div id="editor-saved-flash" style="opacity:0; transition:opacity 0.3s ease; text-align:center; font-size:0.72rem; font-weight:700; color:var(--success-bright, #4ade80); margin-top:6px;">✓ Saved</div>
+                <button class="btn btn-danger" style="margin-top: 8px;" onclick="factoryReset()">⚠️ Factory Reset Data</button>
             </div>
             <div>
                 <div id="editor-content"></div>
@@ -250,10 +262,23 @@
     <div id="combat-bar-fixed"></div>
 
     <style>
+        /* No shared backdrop panel behind the FAB menu — each pill and the
+           main button carry their own negative-glow shadow instead (see
+           .fab-menu-item and #main-fab below), so they read as individually
+           floating rather than needing a blurred container behind them. */
+        @keyframes fabBackdropFade {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
         #fab-container {
             position: fixed;
             bottom: 154px;
-            /* Perfectly sits right above the mobile combat card padding */
             right: 24px;
             z-index: 95;
             display: flex;
@@ -263,11 +288,108 @@
         }
 
         @media (min-width: 820px) {
+
+            /* BASE FAB ALIGNMENTS (Shared) */
             #fab-container {
-                /* Shifts it right above the fixed desktop combat bar and keeps it inside the workspace */
-                bottom: 100px;
-                right: 292px;
+                pointer-events: none;
             }
+
+            #fab-container>* {
+                pointer-events: auto;
+            }
+
+            /* ── STATE 1: LIQUID ENGINE (Default) ── */
+            body:not(.fab-gear) #fab-container {
+                bottom: 83px !important;
+                left: 196px;
+                right: calc(clamp(240px, 18vw, 320px));
+                padding: 0 18px !important;
+                align-items: center !important;
+            }
+
+            body:not(.fab-gear) #fab-menu {
+                flex-direction: row !important;
+                flex-wrap: wrap !important;
+                align-items: center !important;
+                justify-content: flex-end !important;
+                margin-bottom: 2px !important;
+                max-width: 60vw;
+            }
+
+            body:not(.fab-gear) #main-fab {
+                width: 24% !important;
+                height: 72px !important;
+                border-radius: 0 !important;
+                margin: 0 !important;
+                clip-path: url(#m3-flush-fab-shape) !important;
+                -webkit-clip-path: url(#m3-flush-fab-shape) !important;
+                display: flex !important;
+                justify-content: center !important;
+                align-items: flex-end !important;
+                padding-bottom: 14px !important;
+                box-shadow: var(--sh3) !important;
+
+                /* Standard property */
+                mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+
+                /* Required vendor prefix for Safari and older browsers */
+                -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+            }
+
+            body:not(.fab-gear) #fab-icon {
+                font-size: 1.8rem;
+                filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.8));
+            }
+
+            /* ── STATE 2: CLASSIC GEAR (Fallback) ── */
+            body.fab-gear #fab-container {
+                z-index: 95;
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                bottom: 96px;
+                /* Reduced the gap from +24px to +12px so it sits neatly aligned */
+                right: calc(clamp(320px, 25vw, 420px) - 84px);
+                left: auto;
+                align-items: flex-end;
+            }
+
+            body.fab-gear #fab-menu {
+                align-items: flex-end !important;
+                margin-bottom: 5px !important;
+            }
+
+            body.fab-gear #main-fab {
+                width: 54px !important;
+                height: 54px !important;
+                margin: 0 !important;
+                border-radius: 0 !important;
+                /* Managed by clip-path */
+                clip-path: url(#m3-cookie-shape) !important;
+                -webkit-clip-path: url(#m3-cookie-shape) !important;
+                box-shadow: var(--sh3), 0 0 0 1px rgba(0, 0, 0, 0.28) !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                padding-bottom: 0 !important;
+            }
+
+            body.fab-gear #fab-icon {
+                /* Strips out the liquid engine icon styling so it behaves like raw text again */
+                font-size: inherit !important;
+                filter: none !important;
+                transform: none !important;
+            }
+        }
+
+        /* Applies at every viewport (not just >=820px): in gear mode the
+           WHOLE #main-fab button rotates on click (see toggleFab), so the
+           inner #fab-icon span must never carry its own transform — on
+           mobile there's no separate gear-shape override to force this,
+           so without this rule a stray icon-only rotation could look like
+           only the "+" spins while the gear body stays put. */
+        body.fab-gear #fab-icon {
+            transform: none !important;
         }
 
         .fab-menu-item {
@@ -279,9 +401,9 @@
             font-size: 0.8rem;
             font-weight: 700;
             cursor: pointer;
-            box-shadow: var(--sh2);
+            box-shadow: var(--sh3), 0 0 0 1px rgba(0, 0, 0, 0.28);
             white-space: nowrap;
-            transition: background 0.15s, transform 0.15s;
+            transition: background 0.15s, transform 0.15s, box-shadow 0.15s;
             font-family: var(--font-main);
         }
 
@@ -294,11 +416,12 @@
     <div id="fab-container" style="display:none;">
         <div id="fab-menu"
             style="display: none; flex-direction: column; gap: 8px; align-items: flex-end; margin-bottom: 5px;">
-            <button class="fab-menu-item" onclick="toggleFab(); openWantMore();">⚡ Inject Resource Task</button>
             <button class="fab-menu-item" onclick="toggleFab(); openMissionModal();">🎯 Add Custom Objective</button>
+            <button class="fab-menu-item" onclick="toggleFab(); openWantMore();">⚡ Inject Resource Task</button>
+            <button class="fab-menu-item" onclick="toggleFab(); switchTab('editor');">➕ Add Resource</button>
         </div>
         <button id="main-fab" onclick="toggleFab()"
-            style="width: 54px; height: 54px; background: var(--accent); color: #000; border: none; font-size: 1.8rem; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 20px rgba(245, 166, 35, 0.4); cursor: pointer; transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1); clip-path: url(#m3-cookie-shape); -webkit-clip-path: url(#m3-cookie-shape);">
+            style="width: 54px; height: 54px; background: var(--accent); color: #000; border: none; font-size: 1.8rem; display: flex; align-items: center; justify-content: center; box-shadow: var(--sh3), 0 0 0 1px rgba(0, 0, 0, 0.28); cursor: pointer; transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1); clip-path: url(#m3-cookie-shape); -webkit-clip-path: url(#m3-cookie-shape);">
             +
         </button>
     </div>
@@ -331,9 +454,12 @@
             id="tab-schedule"><i>📋</i><span>TODO</span></button>
         <button class="nav-item" onclick="switchTab('custom')" id="tab-custom"><i>🎯</i><span>Custom</span></button>
         <button class="nav-item" onclick="switchTab('visualize')"
-            id="tab-visualize"><i>🌌</i><span>Visualise</span></button>
+            id="tab-visualize"><i>🌌</i><span class="nav-label-short">Visual</span><span class="nav-label-full">Visualise</span></button>
+        <button class="nav-item" onclick="switchTab('brainboard')"
+            id="tab-brainboard"><i>🧠</i><span class="nav-label-short">Brain</span><span class="nav-label-full">BrainBoard</span></button>
         <button class="nav-item" onclick="switchTab('stats')" id="tab-stats"><i>✨</i><span>Stats</span></button>
         <button class="nav-item" onclick="switchTab('editor')" id="tab-editor"><i>✏️</i><span>Edit</span></button>
+        <button class="nav-item" onclick="switchTab('library')" id="tab-library"><i>🏛️</i><span>Library</span></button>
         <div id="nav-spacer" style="flex:1;"></div>
         <button class="nav-item" id="btn-settings-sidebar"
             onclick="openSettings()"><i>⏣</i><span>Settings</span></button>
@@ -361,13 +487,20 @@
             <div class="triumph-dots" id="triumph-dots"></div>
             <button class="triumph-btn" id="triumph-btn" onclick="triumphNext()">NEXT &#9654;</button>
         </div>
+        <!-- Orbits above everything (including the card) — a live flora pattern
+             whose dot count IS the points just awarded. -->
+        <div id="triumph-flora-orbit">
+            <div class="triumph-flora-ring" id="triumph-flora-ring">
+                <canvas id="triumph-flora-canvas" class="triumph-flora-dot"></canvas>
+            </div>
+        </div>
     </div>
 
 
-    <div id="droplet-overlay" class="modal-overlay"
-        style="align-items:flex-end; justify-content:center; padding:0; display:none;">
+    <div id="droplet-overlay"
+        style="position:fixed; inset:0; z-index:1500; display:none; align-items:flex-end; justify-content:center; padding:0; background:transparent; backdrop-filter:none;">
         <div id="droplet-backdrop" onclick="closeDroplet()"
-            style="position:absolute; inset:0; background:rgba(0,0,0,0.75); backdrop-filter:blur(6px);"></div>
+            style="position:absolute; inset:0; background:rgba(0,0,0,0.75); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);"></div>
         <div id="droplet-panel"
             style="position:relative; width:100%; max-width:560px; background:var(--surface); border:1px solid var(--border-hi); border-radius:28px 28px 0 0; padding:24px; animation:springUp 0.38s var(--spring) both; max-height:85vh; overflow-y:auto; z-index:1; scrollbar-width:none;">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
@@ -425,7 +558,7 @@
         <div class="modal">
             <h2 id="modal-title">Log Task</h2>
             <p id="modal-desc" style="font-size: 0.9rem; color: var(--text-muted);"></p>
-            <input type="number" id="modal-input" placeholder="Questions Done" min="0" step="1">
+            <input type="number" id="modal-input" placeholder="Amount (Qs/Pts)" min="0" step="1">
             <div id="modal-porosity-row" style="display:none; margin-bottom:10px;">
                 <div style="font-size:0.78rem; color:var(--text-muted); margin-bottom:8px; font-weight:600;">Did you do
                     this porously?</div>
@@ -509,7 +642,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
-        import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-database.js";
+        import { getDatabase, ref, set, get, child, remove, update } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-database.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDE0Z-nAzyFWzAIEubmDcUTCJW0dXTUYlQ",
@@ -530,6 +663,11 @@
 
         let currentUser = null;
 
+        // ⚡ SHARED BOARD PUBLIC VIEW
+        // A "?shared=<id>" link bypasses login entirely and renders a read-only
+        // brainboard fetched from the public sharedBoards/ path (see database.rules.json).
+        const sharedBoardId = new URLSearchParams(location.search).get('shared');
+
         // ⚡ FIREBASE KEY SANITIZERS
         // Firebase RTDB strictly forbids ., #, $, /, [, and ] in keys.
         const encodeKey = (k) => k.replace(/\./g, '%2E').replace(/\$/g, '%24').replace(/#/g, '%23').replace(/\[/g, '%5B').replace(/\]/g, '%5D').replace(/\//g, '%2F');
@@ -548,41 +686,101 @@
             return result;
         }
 
-        // Listen for Auth State Changes
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                currentUser = user; // ❌ This is local to the module
-                window.appUser = user; // ✅ Add this: Now script.js can see window.appUser
-                document.getElementById('login-overlay').style.display = 'none';
-                document.getElementById('loading-overlay').style.display = 'flex';
+        if (sharedBoardId) {
+            // Public read-only mode: skip login/auth entirely.
+            document.getElementById('login-overlay').style.display = 'none';
+            document.getElementById('loading-overlay').style.display = 'none';
 
-                // Fetch user data from Realtime Database
-                get(child(ref(db), `users/${user.uid}/appData`)).then((snapshot) => {
-                    if (snapshot.exists()) {
-                        // Decode keys so script.js gets the normal '.csv' names back
-                        window.firebaseAppData = sanitizePayload(snapshot.val(), decodeKey);
-                    } else {
-                        window.firebaseAppData = null;
-                    }
+            let sharedRoot = document.createElement('div');
+            sharedRoot.id = 'shared-board-root';
+            sharedRoot.style.cssText = 'position:fixed; inset:0; z-index:1000000; background:var(--bg); overflow:auto; padding:20px; box-sizing:border-box;';
+            sharedRoot.innerHTML = `
+                <div style="max-width:900px; margin:0 auto; display:flex; flex-direction:column; gap:14px;">
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <span style="font-size:1.6rem;">🧠</span>
+                        <div>
+                            <div style="font-family:'Bricolage Grotesque',sans-serif; font-weight:800; color:var(--accent); text-transform:uppercase; letter-spacing:1px;">Shared Brainboard</div>
+                            <div id="shared-board-owner" style="font-size:0.75rem; color:var(--text-muted);">Loading…</div>
+                        </div>
+                    </div>
+                    <div id="bb-shared-viewport" style="position:relative; width:100%; height:80vh; background:var(--surface-light); border:1px solid var(--border-hi); border-radius:16px; overflow:hidden; touch-action:none;"></div>
+                </div>
+            `;
+            document.body.appendChild(sharedRoot);
 
-                    if (window.initializeAppLogic) {
-                        window.initializeAppLogic();
-                    }
-                }).catch((error) => {
-                    console.error("Error fetching data:", error);
-                    alert("Failed to sync data from cloud.");
-                });
+            get(child(ref(db), `sharedBoards/${sharedBoardId}`)).then((snap) => {
+                let ownerEl = document.getElementById('shared-board-owner');
+                let vpEl = document.getElementById('bb-shared-viewport');
+                if (!snap.exists()) {
+                    ownerEl.textContent = 'Link unavailable';
+                    vpEl.innerHTML = `<div style="display:flex; align-items:center; justify-content:center; height:100%; color:var(--text-muted); text-align:center; padding:20px;">This share link is no longer active.</div>`;
+                    return;
+                }
+                let data = sanitizePayload(snap.val(), decodeKey);
+                ownerEl.textContent = `Shared by ${data.ownerName || 'a TDX user'} · view-only`;
+                if (window.renderReadonlyBoard) {
+                    window.renderReadonlyBoard('bb-shared-viewport', data.nodes || [], data.links || [], data.cam);
+                }
+            }).catch((error) => {
+                console.error('Failed to load shared board:', error);
+                document.getElementById('bb-shared-viewport').innerHTML = `<div style="color:var(--text-muted); text-align:center; padding:40px;">Failed to load this board.</div>`;
+            });
+        } else {
+            // Listen for Auth State Changes
+            onAuthStateChanged(auth, (user) => {
+                if (user) {
+                    currentUser = user; // ❌ This is local to the module
+                    window.appUser = user; // ✅ Add this: Now script.js can see window.appUser
+                    document.getElementById('login-overlay').style.display = 'none';
+                    document.getElementById('loading-overlay').style.display = 'flex';
 
-            } else {
-                currentUser = null;
-                document.getElementById('login-overlay').style.display = 'flex';
-                document.getElementById('loading-overlay').style.display = 'none';
-            }
-        });
+                    // Fetch user data from Realtime Database
+                    get(child(ref(db), `users/${user.uid}/appData`)).then((snapshot) => {
+                        if (snapshot.exists()) {
+                            // Decode keys so script.js gets the normal '.csv' names back
+                            window.firebaseAppData = sanitizePayload(snapshot.val(), decodeKey);
+                        } else {
+                            window.firebaseAppData = null;
+                        }
+
+                        if (window.initializeAppLogic) {
+                            window.initializeAppLogic();
+                        }
+                    }).catch((error) => {
+                        console.error("Error fetching data:", error);
+                        if (window.tdxAlert) window.tdxAlert("Failed to sync data from cloud."); else alert("Failed to sync data from cloud.");
+                    });
+
+                } else {
+                    currentUser = null;
+                    document.getElementById('login-overlay').style.display = 'flex';
+                    document.getElementById('loading-overlay').style.display = 'none';
+                }
+            });
+        }
 
         // Global hooks
         window.loginWithGoogle = () => {
             signInWithPopup(auth, provider).catch((error) => console.error("Login failed:", error.message));
+        };
+
+        window.connectGoogleDrive = () => {
+            // Create a NEW provider instance specifically for requesting Drive scope
+            const driveProvider = new GoogleAuthProvider();
+            driveProvider.addScope('https://www.googleapis.com/auth/drive.file');
+
+            // Triggering popup again while logged in will skip the password prompt 
+            // and strictly ask for the new Drive permission.
+            signInWithPopup(auth, driveProvider).then((result) => {
+                const credential = GoogleAuthProvider.credentialFromResult(result);
+                if (credential && credential.accessToken) {
+                    // Save the token securely for this session to upload files
+                    sessionStorage.setItem('gdrive_token', credential.accessToken);
+                    if (window.renderBrainboard) window.renderBrainboard();
+                }
+            }).catch((error) => {
+                console.error("Drive Auth failed:", error);
+            });
         };
 
         window.logoutGoogle = () => {
@@ -597,11 +795,130 @@
                     .catch((error) => console.error("Cloud save failed:", error));
             }
         };
+
+        // ⚡ BRAINBOARD SHARING — mirrors a read-only copy to a public path so
+        // anyone with the link can view it, while only the owner can write it.
+        window.publishSharedBoard = (shareId, data) => {
+            if (!currentUser || !shareId) return Promise.resolve();
+            const safe = sanitizePayload({
+                ownerUid: currentUser.uid,
+                ownerName: currentUser.displayName || 'a TDX user',
+                updatedAt: Date.now(),
+                nodes: data.nodes || [],
+                links: data.links || [],
+                cam: data.cam || { x: 0, y: 0, z: 1 },
+            }, encodeKey);
+            return set(ref(db, 'sharedBoards/' + shareId), safe)
+                .catch((error) => console.error("Share publish failed:", error));
+        };
+
+        window.unpublishSharedBoard = (shareId) => {
+            if (!shareId) return Promise.resolve();
+            return remove(ref(db, 'sharedBoards/' + shareId))
+                .catch((error) => console.error("Unshare failed:", error));
+        };
+
+        // ⚡ BRAINBOARD HISTORY — one snapshot per calendar day, owner-only.
+        window.saveBrainboardSnapshot = (dateKey, data) => {
+            if (!currentUser) return Promise.resolve();
+            const safe = sanitizePayload(data, encodeKey);
+            return set(ref(db, 'users/' + currentUser.uid + '/bbHistory/' + dateKey), safe)
+                .catch((error) => console.error("Snapshot save failed:", error));
+        };
+
+        window.fetchBrainboardHistoryDates = async () => {
+            if (!currentUser) return [];
+            try {
+                let snap = await get(child(ref(db), 'users/' + currentUser.uid + '/bbHistory'));
+                return snap.exists() ? Object.keys(snap.val()) : [];
+            } catch (error) {
+                console.error("Fetching history failed:", error);
+                return [];
+            }
+        };
+
+        window.fetchBrainboardSnapshot = async (dateKey) => {
+            if (!currentUser) return null;
+            try {
+                let snap = await get(child(ref(db), 'users/' + currentUser.uid + '/bbHistory/' + dateKey));
+                return snap.exists() ? sanitizePayload(snap.val(), decodeKey) : null;
+            } catch (error) {
+                console.error("Fetching snapshot failed:", error);
+                return null;
+            }
+        };
+
+        // ⚡ LIBRARY — community-published resource presets, readable by everyone,
+        // writable by any signed-in user (mirrors community_presets/ in database.rules.json).
+        // Each preset is versioned: publishing either creates a brand-new preset
+        // (isNew=true, versionId='v1') or appends a new version to an existing one
+        // (isNew=false) — the new version always becomes the "top"/latest.
+        window.publishCommunityPreset = (id, versionId, data) => {
+            if (!currentUser) return Promise.resolve();
+            const authorName = currentUser.displayName || 'a TDX user';
+            const safeVersion = sanitizePayload({
+                rows: data.rows || [],
+                unit: data.unit || 'q',
+                kind: data.kind || 'exercise',
+                authorUid: currentUser.uid,
+                authorName: authorName,
+                createdAt: Date.now(),
+                note: data.note || '',
+                parentVersionId: data.parentVersionId || null,
+            }, encodeKey);
+
+            // NB: these top-level keys are literal Firebase paths for a multi-path
+            // update() — they must NOT go through sanitizePayload/encodeKey (which
+            // would escape the '/' separators and break the write). Only the leaf
+            // values (already encoded above via safeVersion) need key-sanitizing.
+            const updates = {};
+            updates[`community_presets/${id}/versions/${versionId}`] = safeVersion;
+            updates[`community_presets/${id}/latestVersionId`] = versionId;
+            updates[`community_presets/${id}/name`] = data.name;
+            updates[`community_presets/${id}/subjHint`] = data.subjHint || '';
+            updates[`community_presets/${id}/icon`] = data.icon || '📚';
+            updates[`community_presets/${id}/contributors/${currentUser.uid}`] = authorName;
+            if (data.isNew) {
+                updates[`community_presets/${id}/originalAuthorUid`] = currentUser.uid;
+                updates[`community_presets/${id}/originalAuthorName`] = authorName;
+                updates[`community_presets/${id}/createdAt`] = Date.now();
+            }
+            return update(ref(db), updates)
+                .catch((error) => console.error("Publish failed:", error));
+        };
+
+        window.fetchCommunityPresets = async () => {
+            try {
+                let snap = await get(child(ref(db), 'community_presets'));
+                if (!snap.exists()) return [];
+                let val = sanitizePayload(snap.val(), decodeKey);
+                return Object.keys(val).map(id => ({ id, ...val[id] }));
+            } catch (error) {
+                console.error("Fetching community presets failed:", error);
+                return [];
+            }
+        };
+
+        window.deleteCommunityPreset = (id) => {
+            if (!currentUser) return Promise.resolve();
+            return remove(ref(db, 'community_presets/' + id))
+                .catch((error) => console.error("Delete preset failed:", error));
+        };
+
+        window.deleteCommunityPresetVersion = (id, versionId, newLatestVersionId) => {
+            if (!currentUser) return Promise.resolve();
+            const updates = {};
+            updates[`community_presets/${id}/versions/${versionId}`] = null;
+            if (newLatestVersionId) updates[`community_presets/${id}/latestVersionId`] = newLatestVersionId;
+            return update(ref(db), updates)
+                .catch((error) => console.error("Delete version failed:", error));
+        };
     </script>
 
     <!-- 3. Add a button to your HTML to trigger the function -->
     <!-- <button onclick="loginWithGoogle()">Sign in with Google</button> -->
-    <script src="script.js"></script>
+    <script src="flora.js?v=20260716"></script>
+    <script src="script.js?v=20260716"></script>
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
