@@ -105,9 +105,9 @@ body.theme-sakura {
     --border: rgba(236, 72, 153, 0.2);
     --border-hi: rgba(236, 72, 153, 0.35);
     --border-accent: rgba(236, 72, 153, 0.5);
-    --sh1: 0 1px 4px rgba(0,0,0,0.05);
-    --sh2: 0 4px 18px rgba(0,0,0,0.08);
-    --sh3: 0 16px 52px rgba(0,0,0,0.12);
+    --sh1: 0 1px 4px rgba(0, 0, 0, 0.05);
+    --sh2: 0 4px 18px rgba(0, 0, 0, 0.08);
+    --sh3: 0 16px 52px rgba(0, 0, 0, 0.12);
     /* Sakura Fonts */
     --font-head: 'Outfit', 'Noto Color Emoji', sans-serif;
     --font-main: 'Nunito', 'Noto Color Emoji', sans-serif;
@@ -423,9 +423,19 @@ body.theme-sakura {
     transition: background 0.4s ease;
 }
 
+/* A rotating square sized off vmax (not a percentage of its own box), so its
+   half-side always exceeds the viewport's own half-diagonal regardless of
+   aspect ratio — the old inset:-60% rectangle scaled per-axis to its own
+   box, which fell short on tall/narrow phone screens and let its corners
+   sweep visibly into view as it rotated. Centered via top/left+margin so the
+   rotation keyframe below can own `transform` outright. */
 .triumph-rays {
     position: absolute;
-    inset: -60%;
+    top: 50%;
+    left: 50%;
+    width: 220vmax;
+    height: 220vmax;
+    margin: -110vmax 0 0 -110vmax;
     background: repeating-conic-gradient(color-mix(in srgb, var(--gc, #f5a623) 13%, transparent) 0deg 9deg, color-mix(in srgb, var(--gc, #f5a623) 3%, transparent) 9deg 18deg);
     animation: triumphRays 28s linear infinite;
     transition: background 0.4s ease;
@@ -441,7 +451,7 @@ body.theme-sakura {
 
 .triumph-card {
     position: relative;
-    z-index: 1;
+    z-index: 2;
     width: 100%;
     max-width: 360px;
     background: linear-gradient(155deg, #1a1506 0%, #0e0e12 55%, #12100a 100%);
@@ -452,6 +462,37 @@ body.theme-sakura {
     text-align: center;
     animation: triumphIn 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) both;
     transition: border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+/* Live points-particle field — a full-viewport gravity simulation (see
+   makeAnimatedBadgeFlower in flora.js: hierarchical sun/planet/moon Kepler
+   orbits, per-dot coalescing merges, card-avoidance push-out). Sits above
+   the decorative background layers (bg/rays/glow-ring, all z-index:auto)
+   but below .triumph-card (z-index:2) so it never washes out the card's
+   text — the orbits sweep the whole screen around the card instead. */
+#triumph-flora-orbit {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    display: none;
+    pointer-events: none;
+}
+
+#triumph-overlay.open #triumph-flora-orbit.active {
+    display: block;
+    animation: fabBackdropFade 0.4s ease both;
+}
+
+.triumph-flora-ring {
+    position: absolute;
+    inset: 0;
+}
+
+.triumph-flora-dot {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
 }
 
 .triumph-slide {
@@ -666,9 +707,20 @@ body.theme-sakura {
     font-family: 'Nunito', 'Noto Color Emoji', 'Segoe UI Emoji', 'Apple Color Emoji', sans-serif;
 }
 
+
 body {
     margin: 0;
-    background: var(--bg);
+
+    /* 1. THE DARK BASE COLOR */
+    background-color: var(--bg);
+
+    /* 2. THE POLKA DOT / DOT MATRIX PATTERN */
+    background-image: radial-gradient(circle, color-mix(in srgb, var(--text) 8%, transparent) 1.5px, transparent 1.5px);
+    background-size: 24px 24px;
+    background-position: center top;
+    background-attachment: fixed;
+
+    /* 3. YOUR ORIGINAL SETTINGS */
     color: var(--text);
     padding-bottom: 130px;
     overscroll-behavior-y: none;
@@ -834,6 +886,45 @@ body {
     transform: scale(1.1);
 }
 
+/* Label span: stretched to the button's actual width so JS (fitNavLabels)
+   can detect real overflow via scrollWidth vs clientWidth, and hide the
+   label entirely rather than letting it clip/wrap awkwardly. */
+.nav-item span {
+    display: block;
+    align-self: stretch;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Phone bottom nav: icon + a small dot indicator instead of the text label
+   (display:none removes the label from the flex flow entirely, so no empty
+   row is reserved for it — the dot below is its own tiny replacement, not a
+   leftover gap). Filled when the tab is active, hollow otherwise. */
+@media (max-width: 819px) {
+    .nav-item span {
+        display: none;
+    }
+
+    .nav-item {
+        gap: 2px;
+        padding: 7px 14px;
+    }
+
+    .nav-item::after {
+        content: '○';
+        font-size: 0.5rem;
+        line-height: 1;
+        color: var(--text-subtle);
+    }
+
+    .nav-item.active::after {
+        content: '●';
+        color: var(--accent);
+    }
+}
+
 /* ── Cards ── */
 .card {
     background: var(--surface);
@@ -848,7 +939,7 @@ body {
 .card:hover {
     box-shadow: var(--sh2);
     border-color: var(--border-hi);
-    transform: translateY(-2px);
+    /* transform: translateY(-2px); */
 }
 
 .card-header {
@@ -900,7 +991,7 @@ body {
 
 .task-item {
     padding: 12px 14px;
-    border-bottom: 4px solid var(--border);
+    border-bottom: none;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -1008,17 +1099,17 @@ body {
     background: rgba(255, 255, 255, 0.06);
     border-radius: 100px;
     overflow: hidden;
-    
+
     /* 1. Flatter curve: The control points (4.5 and 7.5) are much closer to the center (6) */
     -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='12' viewBox='0 0 60 12'%3E%3Cpath d='M0,6 C10,4.5 20,4.5 30,6 C40,7.5 50,7.5 60,6' fill='none' stroke='black' stroke-width='6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
     mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='12' viewBox='0 0 60 12'%3E%3Cpath d='M0,6 C10,4.5 20,4.5 30,6 C40,7.5 50,7.5 60,6' fill='none' stroke='black' stroke-width='6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-    
+
     /* 2. Wider wavelength: Stretched from 24px to 60px */
     -webkit-mask-size: 60px 100%;
     mask-size: 60px 100%;
     -webkit-mask-repeat: repeat-x;
     mask-repeat: repeat-x;
-    
+
     /* 3. Slower speed: 12s instead of 1s for a relaxed glide */
     animation: waveMove 12s linear infinite;
 }
@@ -1028,6 +1119,7 @@ body {
         -webkit-mask-position: 0 0;
         mask-position: 0 0;
     }
+
     to {
         /* 4. Match the new mask-size (60px) so the loop is perfectly seamless */
         -webkit-mask-position: -60px 0;
@@ -2061,13 +2153,19 @@ h2 {
 }
 
 #combat-bar-fixed {
+    /* Extends all the way to the screen bottom (not just to where the card
+       sits) so its solid backdrop reaches the bottom nav with no gap — the
+       nav itself (z-index:100) still renders on top of the lower portion. */
     position: fixed;
-    bottom: 70px;
+    bottom: 0;
     left: 0;
     right: 0;
     z-index: 90;
-    padding: 0 14px 8px;
-    background: linear-gradient(to bottom, transparent 0%, var(--bg) 38%);
+    /* --bottom-nav-h is measured live (see syncBottomNavHeight in script.js) so
+       this always matches the nav's *actual* height instead of a guessed
+       constant — the two silently drifting apart is what caused the gap. */
+    padding: 0 14px calc(var(--bottom-nav-h, 70px) + 8px);
+    background: linear-gradient(to bottom, transparent 0%, var(--bg) 22%, var(--bg) 100%);
     pointer-events: none;
 }
 
@@ -2076,20 +2174,55 @@ h2 {
 }
 
 /* Always hide desktop-only elements on mobile */
-.sidebar-brand { display: none; }
-#desktop-right-panel { display: none; }
-#header-bottom-wrap { display: none; } /* <-- Added */
-#header-day-strip { display: none; }
-#welcome-msg-pc { display: none; } /* <-- Added */
-#btn-settings-sidebar { display: none; }
-#nav-spacer { display: none; }
+.sidebar-brand {
+    display: none;
+}
+
+/* Nav label: short form on mobile, full name on desktop (see @media 820px below).
+   Qualified with .nav-item so it stays more specific than the general
+   ".nav-item span" sizing rule below. */
+.nav-item .nav-label-full {
+    display: none;
+}
+
+/* Brainboard pan/zoom hint: only useful once there's a mouse + room for it */
+.bb-hint-text {
+    display: none;
+}
+
+#desktop-right-panel {
+    display: none;
+}
+
+#header-bottom-wrap {
+    display: none;
+}
+
+/* <-- Added */
+#header-day-strip {
+    display: none;
+}
+
+#welcome-msg-pc {
+    display: none;
+}
+
+/* <-- Added */
+#btn-settings-sidebar {
+    display: none;
+}
+
+#nav-spacer {
+    display: none;
+}
 
 /* ── DESKTOP LAYOUT (≥820px) ── */
 @media (min-width: 820px) {
     body {
         padding-bottom: 0;
         padding-left: 196px;
-        padding-right: 268px;
+        padding-right: clamp(240px, 18vw, 320px);
+        /* Breathes dynamically */
     }
 
     /* Left Sidebar */
@@ -2152,6 +2285,13 @@ h2 {
         font-size: 0.92rem;
     }
 
+    .nav-item span {
+        flex: 1;
+        align-self: auto;
+        text-align: left;
+        min-width: 0;
+    }
+
     .nav-item.active {
         background: var(--accent-dim);
         color: var(--accent);
@@ -2174,6 +2314,18 @@ h2 {
         display: block;
     }
 
+    .nav-item .nav-label-full {
+        display: inline;
+    }
+
+    .nav-item .nav-label-short {
+        display: none;
+    }
+
+    .bb-hint-text {
+        display: block;
+    }
+
     /* Right Command Center */
     #desktop-right-panel {
         display: flex;
@@ -2182,12 +2334,15 @@ h2 {
         right: 0;
         top: 0;
         bottom: 0;
-        width: 268px;
+        width: clamp(240px, 18vw, 320px);
+        /* Breathes dynamically */
         background: var(--surface);
         border-left: 1px solid var(--border);
         overflow-y: auto;
+        overflow-x: hidden;
+        /* Prevents whole-page scrollbars */
         z-index: 50;
-        padding: 0 13px 20px;
+        padding: 0 16px 20px;
         scrollbar-width: thin;
         scrollbar-color: rgba(255, 255, 255, 0.06) transparent;
     }
@@ -2212,45 +2367,57 @@ h2 {
         display: none;
     }
 
-    #header-bottom-wrap {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        border-bottom: 1px solid var(--border);
-        padding: 9px 0 10px;
-    }
+#header-bottom-wrap {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 30px; /* Safe distance between calendar and text */
+    border-bottom: 1px solid var(--border);
+    padding: 9px 0 10px;
+}
 
-    #header-day-strip {
-        display: flex;
-        gap: 4px;
-        overflow-x: auto;
-        scrollbar-width: none;
-        border-bottom: none; /* override root */
-        padding: 0; /* override */
-        flex: 1;
-        min-width: 0;
-    }
+#header-day-strip {
+    display: flex;
+    gap: 4px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    border-bottom: none;
+    padding: 0;
+    flex: 0 0 auto; /* FIX: 0 0 auto means "Do not shrink, do not grow, take exact size" */
+    max-width: 65%; /* Prevents calendar from taking over entirely on small screens */
+}
 
-    #welcome-msg-pc {
-        display: block;
-        text-align: right;
-        padding-left: 20px;
-        white-space: nowrap;
-        animation: slideInRight var(--dur-md) var(--decel) both;
-    }
+#welcome-msg-pc {
+    flex: 1 1 0; /* FIX: Take ONLY the remaining leftover space, base width 0 */
+    min-width: 0; /* FIX: Prevents the long text from blowing out the flex boundaries */
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end; /* Hugs the inner text elements strictly to the right edge */
+    animation: slideInRight var(--dur-md) var(--decel) both;
+}
+
+/* Ensure the injected dynamic text wraps cleanly inside its new strict boundary */
+#welcome-msg-pc > div {
+    white-space: normal !important;
+    word-wrap: break-word;
+    line-height: 1.4;
+}
 
     #welcome-msg {
-        display: none !important; /* Hide mobile welcome on desktop */
+        display: none !important;
+        /* Hide mobile welcome on desktop */
     }
 
     #header-day-strip::-webkit-scrollbar {
         display: none;
     }
 
-    /* Schedule: JS-balanced 3 columns via .sched-cols wrapper */
+    /* 2. Specific fix for the schedule tab */
     #schedule-content {
         display: block;
-        padding-bottom: 70px;
+        padding-bottom: 160px !important;
+        /* Bumped from 70px to 160px */
     }
 
     .sched-cols {
@@ -2274,7 +2441,8 @@ h2 {
     #combat-bar-fixed {
         bottom: 0;
         left: 196px;
-        right: 268px;
+        right: clamp(240px, 18vw, 320px);
+        /* Breathes dynamically */
         padding: 8px 18px 10px;
     }
 
@@ -2316,6 +2484,11 @@ h2 {
         display: none !important;
     }
 
+    /* 3. Specific fix for the visualizer tab */
+    /* #vis-content {
+        padding-bottom: 160px !important; 
+    } */
+
     #vis-content.all-res-grid {
         display: flex;
         gap: 14px;
@@ -2349,8 +2522,10 @@ h2 {
         align-items: start;
     }
 
+    /* 1. Increases the global container scroll clearance */
     .container {
-        padding: 16px 18px 80px;
+        padding: 16px 18px 160px !important;
+        /* Bumped from 80px to 160px */
         max-width: none;
     }
 
@@ -2524,7 +2699,8 @@ h2 {
 }
 
 .mob-profile {
-    display: inline-flex; /* Shrinks container down tightly around profile contents */
+    display: inline-flex;
+    /* Shrinks container down tightly around profile contents */
     align-items: center;
     gap: 8px;
     cursor: pointer;
@@ -2573,15 +2749,17 @@ h2 {
 
 /* Auto-hide text on extreme tiny screens to preserve centering arrows */
 @media (max-width: 360px) {
-    .mob-profile .mob-prof-info { display: none; }
+    .mob-profile .mob-prof-info {
+        display: none;
+    }
 }
 
 /* Desktop Sidebar Layout */
 @media (min-width: 820px) {
-    #mob-profile-container { 
-        display: none; 
+    #mob-profile-container {
+        display: none;
     }
-    
+
     #pc-profile-container {
         display: flex;
         flex-direction: column;
@@ -2590,7 +2768,7 @@ h2 {
         border-bottom: 1px solid var(--border);
         margin-bottom: 8px;
     }
-    
+
     .pc-profile {
         display: flex;
         flex-direction: column;
@@ -2599,7 +2777,7 @@ h2 {
         width: 100%;
         animation: fadeUp var(--dur-md) var(--decel) both;
     }
-    
+
     .pc-profile .pfp {
         width: 60px;
         height: 60px;
@@ -2607,9 +2785,9 @@ h2 {
         border: 2px solid var(--accent);
         margin-bottom: 10px;
         object-fit: cover;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
     }
-    
+
     .pc-profile .prof-name {
         font-family: 'Bricolage Grotesque', sans-serif, system-ui;
         font-size: 0.95rem;
@@ -2617,7 +2795,7 @@ h2 {
         color: var(--text);
         margin-bottom: 3px;
     }
-    
+
     .pc-profile .prof-rank {
         font-family: 'JetBrains Mono', 'Noto Color Emoji', monospace;
         font-size: 0.65rem;
@@ -2627,13 +2805,13 @@ h2 {
         letter-spacing: 1px;
         margin-bottom: 12px;
     }
-    
+
     .pc-profile .prof-badges {
         display: grid;
         gap: 4px;
         justify-content: center;
     }
-    
+
     /* Make the matrix dots slightly larger on PC */
     .pc-profile .badge-dot {
         width: 5px;
@@ -2644,14 +2822,258 @@ h2 {
 /* ══════════════════════════════════════════════ */
 /* GLOBAL THEME ENFORCERS (Overrides hardcoded fonts) */
 /* ══════════════════════════════════════════════ */
-body, .task-meta, .b-desc, .btn, select, input, textarea, .ed-add-btn, .editor-header, .stat-row {
+body,
+.task-meta,
+.b-desc,
+.btn,
+select,
+input,
+textarea,
+.ed-add-btn,
+.editor-header,
+.stat-row {
     font-family: var(--font-main) !important;
 }
 
-h1, h2, h3, .ch-title, .task-action, .sp-pass-tag, .panel-label, .rank-chip, .b-name, .triumph-label, .triumph-btn, .at-label, .sidebar-brand {
+h1,
+h2,
+h3,
+.ch-title,
+.task-action,
+.sp-pass-tag,
+.panel-label,
+.rank-chip,
+.b-name,
+.triumph-label,
+.triumph-btn,
+.at-label,
+.sidebar-brand {
     font-family: var(--font-head) !important;
 }
 
-.triumph-number, .triumph-sub, .drag-idx, .sp-move-btn, .sp-move-picker-opt, .mob-prof-info, .prof-rank, .agent-msg, .user-msg, .agent-input-row input, .agent-input-row textarea {
+.triumph-number,
+.triumph-sub,
+.drag-idx,
+.sp-move-btn,
+.sp-move-picker-opt,
+.mob-prof-info,
+.prof-rank,
+.agent-msg,
+.user-msg,
+.agent-input-row input,
+.agent-input-row textarea {
     font-family: var(--font-mono) !important;
+}
+
+@media (max-width: 819px) {
+    .pc-only-setting {
+        display: none !important;
+    }
+}
+
+/* ── Brainboard note rich-text formatting ── */
+.bb-fmt-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 0.68rem;
+    padding: 4px 7px;
+    border-radius: 6px;
+    cursor: pointer;
+    line-height: 1.2;
+    font-family: var(--font-main);
+}
+
+.bb-fmt-btn:hover {
+    background: var(--surface-hover);
+    color: var(--text);
+}
+
+.bb-fmt-btn:active {
+    background: var(--accent-dim);
+    color: var(--accent);
+}
+
+.bb-note-body:empty::before {
+    content: 'Type here… *bold* _italic_ ~strike~';
+    color: var(--text-subtle);
+    pointer-events: none;
+}
+
+.bb-note-body ul,
+.bb-note-body ol {
+    margin: 4px 0;
+    padding-left: 20px;
+}
+
+.bb-check-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    margin: 2px 0;
+}
+
+.bb-check-item input[type="checkbox"] {
+    margin-top: 3px;
+    flex-shrink: 0;
+}
+
+.lib-card:hover {
+    border-color: var(--border-accent) !important;
+    transform: translateY(-2px);
+}
+
+/* Library detail's master/detail layout (version list beside chapter panel)
+   collapses to a single column on narrow viewports instead of squeezing
+   both side by side. */
+@media (max-width: 819px) {
+    .lib-dash-grid {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   🕹️ ARCADE MODE — a hidden, opt-in retro-cabinet skin. Pixel font, neon
+   glow, scanlines, blocky zero-radius buttons. Purely cosmetic — no layout
+   or data logic changes, so it's safe to flip on/off at any time.
+   ══════════════════════════════════════════════════════════════════════ */
+body.arcade-mode {
+    --accent: #39ff14;
+    --accent-dim: rgba(57, 255, 20, 0.18);
+    --accent-glow: rgba(57, 255, 20, 0.5);
+    --border-accent: #39ff14;
+    --danger: #ff2079;
+    /* cabinet duo: magenta for danger/secondary, cyan for info — alongside the green accent */
+    --arcade-magenta: #ff2079;
+    --arcade-cyan: #00e5ff;
+    font-family: 'Press Start 2P', 'JetBrains Mono', monospace !important;
+    letter-spacing: 0.5px;
+}
+
+body.arcade-mode * {
+    font-family: 'Press Start 2P', 'JetBrains Mono', monospace !important;
+}
+
+body.arcade-mode h1,
+body.arcade-mode h2,
+body.arcade-mode .triumph-label,
+body.arcade-mode .ch-title {
+    text-shadow: 0 0 6px currentColor, 0 0 14px currentColor;
+}
+
+body.arcade-mode .btn,
+body.arcade-mode .btn-icon,
+body.arcade-mode .task-action,
+body.arcade-mode .fab-menu-item,
+body.arcade-mode input,
+body.arcade-mode select,
+body.arcade-mode .card,
+body.arcade-mode .modal,
+body.arcade-mode .nav-item {
+    border-radius: 0 !important;
+}
+
+body.arcade-mode .btn-primary {
+    background: var(--accent) !important;
+    color: #000 !important;
+    box-shadow: 3px 3px 0 #000, 0 0 16px var(--accent-glow);
+}
+
+body.arcade-mode .btn-danger {
+    color: var(--arcade-magenta) !important;
+    border-color: var(--arcade-magenta) !important;
+    box-shadow: 3px 3px 0 #000;
+}
+
+body.arcade-mode .card {
+    border-color: rgba(57, 255, 20, 0.35) !important;
+    box-shadow: 4px 4px 0 rgba(57, 255, 20, 0.15);
+}
+
+body.arcade-mode .modal {
+    border: 2px solid var(--arcade-cyan) !important;
+    box-shadow: 5px 5px 0 #000, 0 0 24px rgba(0, 229, 255, 0.25) !important;
+}
+
+body.arcade-mode input,
+body.arcade-mode select {
+    border: 2px solid var(--border-accent) !important;
+    box-shadow: 2px 2px 0 #000;
+}
+
+body.arcade-mode input:focus,
+body.arcade-mode select:focus {
+    border-color: var(--arcade-cyan) !important;
+    box-shadow: 2px 2px 0 #000, 0 0 10px rgba(0, 229, 255, 0.5) !important;
+}
+
+body.arcade-mode #main-fab {
+    box-shadow: 3px 3px 0 #000, 0 0 20px var(--accent-glow) !important;
+}
+
+body.arcade-mode .nav-item.active {
+    color: var(--arcade-cyan) !important;
+    background: rgba(0, 229, 255, 0.12) !important;
+}
+
+/* CRT scanline overlay — decorative, ignores clicks */
+body.arcade-mode::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 999998;
+    pointer-events: none;
+    background: repeating-linear-gradient(to bottom, rgba(0, 0, 0, 0) 0px, rgba(0, 0, 0, 0) 2px, rgba(0, 0, 0, 0.12) 3px);
+    mix-blend-mode: multiply;
+    animation: arcadeFlicker 6s linear infinite;
+}
+
+@keyframes arcadeFlicker {
+
+    0%,
+    97%,
+    100% {
+        opacity: 1;
+    }
+
+    98% {
+        opacity: 0.85;
+    }
+}
+
+.arcade-toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 10px 12px;
+    border: 1px dashed var(--border);
+    border-radius: 10px;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+}
+
+.arcade-toggle-row:hover {
+    opacity: 1;
+}
+
+.arcade-toggle-row .arcade-coin-blink {
+    font-size: 0.58rem;
+    color: #39ff14;
+    font-family: 'Press Start 2P', 'JetBrains Mono', monospace;
+    letter-spacing: 1px;
+    animation: arcadeCoinBlink 1.2s steps(1) infinite;
+}
+
+@keyframes arcadeCoinBlink {
+
+    0%,
+    49% {
+        opacity: 1;
+    }
+
+    50%,
+    100% {
+        opacity: 0.15;
+    }
 }
