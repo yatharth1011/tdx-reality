@@ -67,3 +67,13 @@ node_modules/
 
 # dataconnect generated files
 .dataconnect
+
+# Signing keys & credentials: never commit these (keep them in a safe place)
+*.keystore
+*.jks
+*.p12
+*.pfx
+*.pem
+signing-key-info.txt
+TDX - Google Play package.zip
+service-account*.json

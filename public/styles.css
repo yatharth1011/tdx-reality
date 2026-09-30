@@ -908,19 +908,20 @@ body {
     }
 
     .nav-item {
-        gap: 2px;
-        padding: 7px 14px;
+        gap: 0px;
+        padding: 14px 14px;
+        bottom: 5px;
     }
 
     .nav-item::after {
-        content: '○';
-        font-size: 0.5rem;
+        content: '‎ ';
+        font-size: 0rem;
         line-height: 1;
         color: var(--text-subtle);
     }
 
     .nav-item.active::after {
-        content: '●';
+        content: '‎ ';
         color: var(--accent);
     }
 }
